@@ -14,4 +14,15 @@
     </insert>
 
 
+    <insert id="insertBook" parameterType="com.example.demo.entity.Book">
+        INSERT INTO book
+        (text,img,price,shop_name)
+        VALUES
+        <foreach collection="bookList" item="item" separator=",">
+            (#{item.text},#{item.img},#{item.price},#{item.shopName})
+        </foreach>
+
+    </insert>
+
+
 </mapper>

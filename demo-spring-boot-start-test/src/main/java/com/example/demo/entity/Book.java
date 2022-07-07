@@ -6,11 +6,15 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author qiaoyanan
- * date:2022/07/04 16:55
+ * date:2022/07/07 15:12
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UrlEntity {
-    private String  url;
+public class Book {
+
+    private String img;
+    private String text;
+    private String price;
+    private String shopName;
 }

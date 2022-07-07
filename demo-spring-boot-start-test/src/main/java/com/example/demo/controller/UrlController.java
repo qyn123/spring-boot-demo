@@ -1,13 +1,20 @@
 package com.example.demo.controller;
 
+import com.example.demo.entity.Book;
 import com.example.demo.entity.UrlEntity;
 import com.example.demo.mapper.UrlMapper;
 import com.example.demo.util.JsoupUtil;
 import org.jsoup.Connection;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +26,11 @@ import java.util.function.BiConsumer;
  */
 @RestController
 public class UrlController {
+
+    /**
+     * Jsoup 模拟浏览器发起请求
+     */
+    private static final String URL = "https://search.jd.com/Search?keyword=mysql&page=";
 
     @Autowired
     private UrlMapper urlMapper;
@@ -74,6 +86,30 @@ public class UrlController {
 
         map.forEach((integer, listUrl) -> urlMapper.insert(listUrl));
 
+    }
+
+    @PostMapping("books")
+    public  void book() throws Exception {
+        Map<String, List<Book>> map = new HashMap<>(16);
+
+        for (int i = 1; i < 10; i++) {
+            List<Book> bookList = new ArrayList<>();
+            //url 最长解析时间
+            Document document = Jsoup.parse(new URL(URL.concat(String.valueOf(i))), 30000);
+            System.out.println(document.html());
+            Element element = document.getElementById("J_goodsList");
+            // 获取J_goodsList下的所有的li元素
+            Elements elements = element.getElementsByTag("li");
+            for (Element ele : elements) {
+                String img = ele.getElementsByTag("img").eq(0).attr("data-lazy-img");
+                String text = ele.getElementsByClass("p-name").eq(0).text();
+                String price = ele.getElementsByClass("p-price").eq(0).text();
+                String shopName = ele.getElementsByClass("p-shopnum").eq(0).text();
+                bookList.add(new Book(img, text, price, shopName));
+            }
+            map.put(String.valueOf(i), bookList);
+        }
+        map.forEach((s, bookList) -> urlMapper.insertBook(bookList));
     }
 
 }
