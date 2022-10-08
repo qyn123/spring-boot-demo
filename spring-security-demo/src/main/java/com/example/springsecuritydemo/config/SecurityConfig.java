@@ -1,9 +1,10 @@
 package com.example.springsecuritydemo.config;
 
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 /**
  * @author qiaoyanan
@@ -23,5 +24,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         //没有权限会跳转到登录页,需要开启登录的页面
         http.formLogin();
+    }
+
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        auth.inMemoryAuthentication().passwordEncoder(bCryptPasswordEncoder)
+                .withUser("tom").password(bCryptPasswordEncoder.encode("123456")).roles("vip1","vip2")
+                .and()
+                .withUser("admin").password(bCryptPasswordEncoder.encode("123456")).roles("vip1", "vip2","vip3")
+                .and()
+                .withUser("guest").password(bCryptPasswordEncoder.encode("123456")).roles("vip1");
     }
 }
