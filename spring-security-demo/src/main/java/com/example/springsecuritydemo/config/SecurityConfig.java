@@ -22,8 +22,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/level2/**").hasRole("vip2")
         .antMatchers("/level3/**").hasRole("vip3");
 
-        //没有权限会跳转到登录页,需要开启登录的页面
-        http.formLogin();
+        //没有权限会跳转到登录页,需要开启登录的页面,指定登录页
+        http.formLogin().loginPage("/toLogin");
+        // 关闭防范csrf攻击
+        http.csrf().disable();
+        //登出
+        http.logout();
     }
 
 
