@@ -3,3 +3,11 @@ server:
 spring:
   thymeleaf:
     cache: false
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/db01?characterEncoding=utf8&useUnicode=true&useSSL=false&serverTimezone=UTC
+    username: root
+    password: root
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true

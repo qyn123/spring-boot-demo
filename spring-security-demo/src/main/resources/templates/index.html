@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -19,27 +19,43 @@
 
             <!--登录注销-->
             <div class="right menu">
-                <!--未登录-->
-                <a class="item" th:href="@{/toLogin}">
-                    <i class="address card icon"></i> 登录
-                </a>
-                <!--已登录
-                <a th:href="@{/usr/toUserCenter}">
-                    <i class="address card icon"></i> admin
-                </a>
-                -->
+                <!--未登录显示登录按钮-->
+                <div sec:authorize="!isAuthenticated()">
+                    <a class="item" th:href="@{/toLogin}">
+                        <i class="address card icon"></i> 登录
+                    </a>
+                </div>
+                <!--已登录显示用户名-->
+                <div sec:authorize="isAuthenticated()">
+                    <a class="item">
+                        用户名：<span sec:authentication="name"></span>&nbsp;&nbsp;
+                        角色：<span sec:authentication="principal.authorities"></span>&nbsp;&nbsp;
+                    </a>
+                </div>
+
+                <!--已登录显示注销按钮-->
+                <div sec:authorize="isAuthenticated()">
+                    <a class="item" th:href="@{/logout}">
+                        <i class="sign-out icon"></i> 注销
+                    </a>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="ui segment" style="text-align: center">
-        <h3>Spring Security Study by 秦疆</h3>
+        <div sec:authorize="isAuthenticated()">
+            <a class="item">
+                <h2>Spring Security Study by: <span sec:authentication="name"></span></h2>
+            </a>
+        </div>
+
     </div>
 
     <div>
         <br>
         <div class="ui three column stackable grid">
-            <div class="column">
+            <div class="column" sec:authorize="hasRole('vip1')">
                 <div class="ui raised segment">
                     <div class="ui">
                         <div class="content">
@@ -53,7 +69,7 @@
                 </div>
             </div>
 
-            <div class="column">
+            <div class="column" sec:authorize="hasRole('vip2')">
                 <div class="ui raised segment">
                     <div class="ui">
                         <div class="content">
@@ -67,7 +83,7 @@
                 </div>
             </div>
 
-            <div class="column">
+            <div class="column" sec:authorize="hasRole('vip3')">
                 <div class="ui raised segment">
                     <div class="ui">
                         <div class="content">
@@ -83,7 +99,7 @@
 
         </div>
     </div>
-    
+
 </div>
 
 

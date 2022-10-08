@@ -1,5 +1,7 @@
 package com.example.springsecuritydemo.config;
 
+import com.example.springsecuritydemo.service.MyUserDetailService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,10 +15,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    @Autowired
+    private MyUserDetailService myUserDetailService;
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         //请求授权的规则
-        http.authorizeHttpRequests()
+        http.authorizeRequests()
         .antMatchers("/").permitAll()
         .antMatchers("/level1/**").hasRole("vip1")
         .antMatchers("/level2/**").hasRole("vip2")
@@ -27,7 +32,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 关闭防范csrf攻击
         http.csrf().disable();
         //登出
-        http.logout();
+        http.logout().logoutSuccessUrl("/");
+
+        // 开启记住我功能，默认Cookie为14天过期，自定义接收前端参数
+        // <input type="checkbox" name="remember">记住我
+        http.rememberMe().rememberMeParameter("remember");
     }
 
 
@@ -41,4 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .withUser("guest").password(bCryptPasswordEncoder.encode("123456")).roles("vip1");
     }
+
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.userDetailsService(myUserDetailService);
+//    }
 }
