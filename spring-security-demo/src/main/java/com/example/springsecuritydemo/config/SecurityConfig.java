@@ -1,6 +1,6 @@
 package com.example.springsecuritydemo.config;
 
-import com.example.springsecuritydemo.service.MyUserDetailService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -8,15 +8,15 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import javax.sql.DataSource;
+
 /**
  * @author qiaoyanan
  * date:2022/10/07 20:22
  */
 @EnableWebSecurity
+@Slf4j
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Autowired
-    private MyUserDetailService myUserDetailService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -42,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
         auth.inMemoryAuthentication().passwordEncoder(bCryptPasswordEncoder)
                 .withUser("tom").password(bCryptPasswordEncoder.encode("123456")).roles("vip1","vip2")
@@ -51,8 +52,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .withUser("guest").password(bCryptPasswordEncoder.encode("123456")).roles("vip1");
     }
 
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(myUserDetailService);
-//    }
 }
