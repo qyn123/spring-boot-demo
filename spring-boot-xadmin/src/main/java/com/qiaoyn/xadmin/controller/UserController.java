@@ -1,6 +1,5 @@
 package com.qiaoyn.xadmin.controller;
 
-import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.qiaoyn.xadmin.entity.UserEntity;
 import com.qiaoyn.xadmin.entity.dto.UserQuery;
@@ -11,8 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.List;
 
 /**
  * @author qiaoyanan
@@ -32,11 +29,6 @@ public class UserController {
         return "/user/show-user";
     }
 
-    @GetMapping("/show-user")
-    public String test() {
-        return "/user/show-user";
-    }
-
 
     @PostMapping("/")
     public String listUserByName(Model model, UserQuery userQuery) {
@@ -45,7 +37,7 @@ public class UserController {
         return "/user/show-user";
     }
 
-        @GetMapping("/delete/{id}")
+    @GetMapping("/delete/{id}")
     public String delete(@PathVariable("id") Integer id, RedirectAttributes attributes) {
         boolean b = userService.deleteUserById(id);
         if (b) {

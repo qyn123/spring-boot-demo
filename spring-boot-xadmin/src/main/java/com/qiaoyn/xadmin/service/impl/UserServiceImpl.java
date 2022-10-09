@@ -8,6 +8,7 @@ import com.qiaoyn.xadmin.mapper.UserMapper;
 import com.qiaoyn.xadmin.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -48,6 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean updateUser(UserEntity user) {
         int i = userDao.updateUser(user);
         if(i > 0){
@@ -58,6 +60,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public boolean addUser(UserEntity user) {
         return userDao.addUser(user) > 0 ? true : false ;
     }
