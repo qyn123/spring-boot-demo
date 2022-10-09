@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qiaoyn.xadmin.mapper.UserMapper">
+
+    <select id="listUser" resultType="com.qiaoyn.xadmin.entity.UserEntity">
+        select *
+        from users;
+    </select>
+
+    <select id="listUserByName" parameterType="com.qiaoyn.xadmin.entity.dto.UserQuery" resultType="com.qiaoyn.xadmin.entity.UserEntity">
+        select *
+        from users
+        <where>
+            <if test="userName != null and userName != ''">
+                and `user_name` like concat('%',#{userName},'%')
+            </if>
+        </where>
+    </select>
+
+    <delete id="deleteUserById" parameterType="int">
+        delete from users where id=#{id}
+    </delete>
+
+    <select id="queryUserById" parameterType="int" resultType="com.qiaoyn.xadmin.entity.UserEntity">
+           select *
+        from users
+        where  id=#{id}
+    </select>
+
+
+    <select id="selectUserByName" parameterType="String" resultType="Integer">
+        select count(id) from users
+        where  user_name=#{userName}
+    </select>
+
+
+    <update id="updateUser" parameterType="com.qiaoyn.xadmin.entity.UserEntity">
+        update users
+        set user_name=#{userName},pass_word = #{passWord},user_note = #{userNote}
+        where id = #{id}
+    </update>
+
+    <insert id="addUser" parameterType="com.qiaoyn.xadmin.entity.UserEntity">
+        insert into users(user_name, pass_word,user_note) values (#{userName},#{passWord},#{userNote})
+    </insert>
+</mapper>

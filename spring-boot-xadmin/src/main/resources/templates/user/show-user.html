@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+</head>
+<body>
+<div class="ui container">
+    <div class="ui attached segment">
+        <form th:action="@{/user/}" method="post" style="display: inline-block !important;">
+            <input type="text" name="userName" placeholder="输入用户名查找">
+            <input type="submit" value="搜索">
+        </form>
+        <a th:href="@{/user/update}" class="ui button mini teal" style="margin-left: 30px !important;">新增</a>
+    </div>
+    <table class="ui celled attached table" style="margin-top: 40px !important;">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>姓名</th>
+            <th>密码</th>
+            <th>说明</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user:${page.list}">
+            <td th:text="${user.id}">1</td>
+            <td th:text="${user.userName}">James</td>
+            <td th:text="${user.passWord}">24</td>
+            <td th:text="${user.userNote}">你好</td>
+            <td>
+                <a th:href="@{/user/edit/{id}(id=${user.id})}" class="ui button mini pink">编辑</a>
+                <a th:href="@{/user/delete/{id}(id=${user.id})}" class="ui button mini teal">删除</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!--显示分页信息-->
+    <div class="ui attached segment" >
+        <div class="col-md-6" style="text-align: center">
+            当前第 [[${page.pageNum}]]页,共 [[${page.pages}]] 页.一共 [[${page.total}]] 条记录
+        </div>
+
+        <ul class="pagination pull-right no-margin" style="text-align: center">
+            <span th:if="${page.hasPreviousPage}">
+                <a th:href="'/user/?pageNum=1'">首页</a>
+            </span>
+
+            <span class="prev" th:if="${page.hasPreviousPage}">
+                <a th:href="'/user/?pageNum='+${page.prePage}">
+                    <i class="ace-icon fa fa-angle-double-left"></i>
+                </a>
+            </span>
+            <!--遍历条数-->
+            <span th:each="nav:${page.navigatepageNums}">
+                <a th:href="'/user/?pageNum='+${nav}" th:text="${nav}" th:if="${nav != page.pageNum}"></a>
+                <span style="font-weight: bold;background: #6faed9;" th:if="${nav == page.pageNum}" th:text="${nav}" ></span>
+            </span>
+
+            <span class="next" th:if="${page.hasNextPage}">
+                <a th:href="'/user/?pageNum='+${page.nextPage}">
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                </a>
+            </span>
+
+            <span>
+                <a th:href="'/user/?pageNum='+${page.pages}">尾页</a>
+            </span>
+        </ul>
+    </div>
+    <!--    <div class="ui success  message" th:unless="${#strings.isEmpty(message)}">
+            <i class="close icon"></i>
+            <div class="header">提示：</div>
+            <p th:text="${message}"></p>
+        </div>-->
+</div>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<script>
+    $(".message .close").on('click',function () {
+        $(this).closest(".message")
+            .transition("fade");
+    })
+</script>
+</body>
+</html>
