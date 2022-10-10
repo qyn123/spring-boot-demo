@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 /**
  * @author qiaoyanan
  * date:2022/10/09 10:15
@@ -13,7 +15,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @NoArgsConstructor
 @Accessors(chain = true)
-public class UserEntity {
+public class UserEntity extends DateEntity implements Serializable {
 
     private Integer id;
 

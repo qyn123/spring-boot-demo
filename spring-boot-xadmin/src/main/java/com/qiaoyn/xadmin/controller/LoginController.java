@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
@@ -44,6 +43,7 @@ public class LoginController {
             model.addAttribute("msg", "用户名或者密码不能为空!");
             return "/login";
         } else if (Objects.nonNull(request.getSession().getAttribute("verifyCode")) && !verifyCode.equalsIgnoreCase(String.valueOf(request.getSession().getAttribute("verifyCode")))) {
+            log.info("用户:{},验证码:{}",username,request.getSession().getAttribute("verifyCode"));
             //判断验证码是否一致(忽略大小写)
             model.addAttribute("msg", "验证码不正确");
             return "/login";
@@ -54,6 +54,7 @@ public class LoginController {
                 model.addAttribute("msg", "用户名或者密码错误!");
                 return "/login";
             } else {
+                log.info("用户{}登录成功,验证码:{}",username,request.getSession().getAttribute("verifyCode"));
                 session.setAttribute("loginUser", username);
                 //查询成功重定向到登录成功后进入index页面
                 return "/index";
