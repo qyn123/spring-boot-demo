@@ -34,4 +34,24 @@ public enum PayMethodEnum {
     public void setName(String name) {
         this.name = name;
     }
+
+    public static String getName(Integer code) {
+        PayMethodEnum[] carTypeEnums = values();
+        for (PayMethodEnum enumTest : carTypeEnums) {
+            if (enumTest.getCode().equals(code)) {
+                return enumTest.getName();
+            }
+        }
+        return null;
+    }
+
+    public static Integer getCode(String name) {
+        PayMethodEnum[] carTypeEnums = values();
+        for (PayMethodEnum enumTest : carTypeEnums) {
+            if (enumTest.getName().equals(name)) {
+                return enumTest.getCode();
+            }
+        }
+        return null;
+    }
 }

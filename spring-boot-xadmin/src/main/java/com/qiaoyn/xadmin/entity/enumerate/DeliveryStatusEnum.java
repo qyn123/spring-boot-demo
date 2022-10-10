@@ -35,4 +35,24 @@ public enum DeliveryStatusEnum {
     public void setName(String name) {
         this.name = name;
     }
+
+    public static String getName(Integer code) {
+        DeliveryStatusEnum[] carTypeEnums = values();
+        for (DeliveryStatusEnum enumTest : carTypeEnums) {
+            if (enumTest.getCode().equals(code)) {
+                return enumTest.getName();
+            }
+        }
+        return null;
+    }
+
+    public static Integer getCode(String name) {
+        DeliveryStatusEnum[] carTypeEnums = values();
+        for (DeliveryStatusEnum enumTest : carTypeEnums) {
+            if (enumTest.getName().equals(name)) {
+                return enumTest.getCode();
+            }
+        }
+        return null;
+    }
 }

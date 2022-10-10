@@ -71,8 +71,10 @@
         <button class="layui-btn" onclick="x_admin_show('添加用户','./order-add')"><i class="layui-icon"></i>添加</button>
         <span class="x-right" style="line-height:40px">共有数据：88 条</span>
       </xblock>
-      <table class="layui-table">
-        <thead>
+
+      <form method="get" th:action="@{/order-list}">
+        <table class="layui-table">
+          <thead>
           <tr>
             <th>
               <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
@@ -88,23 +90,23 @@
             <th>配送方式</th>
             <th>下单时间</th>
             <th >操作</th>
-            </tr>
-        </thead>
-        <tbody>
-          <tr>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="order:${orderEntityList}">
             <td>
               <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
             </td>
-            <td>2017009171822298053</td>
-            <td>老王:18925139194</td>
-            <td>7829.10</td>
-            <td>7854.10</td>
-            <td>待确认</td>
-            <td>未支付</td>
-            <td>未发货</td>
-            <td>其他方式</td>
-            <td>申通物流</td>
-            <td>2017-08-17 18:22</td>
+            <td th:text="${order.orderId}">1000</td>
+            <td th:text="${order.userName}">老王:18925139194</td>
+            <td th:text="${order.totalMoney}">7829.10</td>
+            <td th:text="${order.dealMoney}">7854.10</td>
+            <td th:text="${order.orderStatusName}">待确认</td>
+            <td th:text="${order.payStatusName}">未支付</td>
+            <td th:text="${order.payMethodName}">未发货</td>
+            <td th:text="${order.deliveryStatusName}">其他方式</td>
+            <td th:text="${order.sendMethodName}">申通物流</td>
+            <td th:text="${order.createTime}">2017-08-17 18:22</td>
             <td class="td-manage">
               <a title="查看"  onclick="x_admin_show('编辑','order-view')" href="javascript:;">
                 <i class="layui-icon">&#xe63c;</i>
@@ -114,8 +116,10 @@
               </a>
             </td>
           </tr>
-        </tbody>
-      </table>
+          </tbody>
+        </table>
+      </form>
+
       <div class="page">
         <div>
           <a class="prev" href="">&lt;&lt;</a>
