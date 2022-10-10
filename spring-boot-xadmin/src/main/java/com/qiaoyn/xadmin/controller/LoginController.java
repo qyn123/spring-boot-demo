@@ -9,8 +9,12 @@ import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.Objects;
 
 /**
  * @author qiaoyanan
@@ -31,10 +35,17 @@ public class LoginController {
     @PostMapping("/login")
     public String selectUser(@RequestParam("userName") String username,
                              @RequestParam("passWord") String password,
+                             @RequestParam("verifyCode") String verifyCode,
+                             HttpSession session,
+                             HttpServletRequest request,
                              Model model) {
         if (ObjectUtils.isEmpty(username) || ObjectUtils.isEmpty(password)) {
             //查询失败，返回提示信息给登录页面
             model.addAttribute("msg", "用户名或者密码不能为空!");
+            return "/login";
+        } else if (Objects.nonNull(request.getSession().getAttribute("verifyCode")) && !verifyCode.equalsIgnoreCase(String.valueOf(request.getSession().getAttribute("verifyCode")))) {
+            //判断验证码是否一致(忽略大小写)
+            model.addAttribute("msg", "验证码不正确");
             return "/login";
         } else {
             UserEntity userEntity = userService.selectUserByNameAndPassWord(username, password);
@@ -43,6 +54,7 @@ public class LoginController {
                 model.addAttribute("msg", "用户名或者密码错误!");
                 return "/login";
             } else {
+                session.setAttribute("loginUser", username);
                 //查询成功重定向到登录成功后进入index页面
                 return "/index";
             }
@@ -57,8 +69,8 @@ public class LoginController {
     @PostMapping("/register")
     public String register(@RequestParam("userName") String userName,
                            @RequestParam("passWord") String passWord,
-                           @RequestParam("userNote") String userNote,Model model) {
-        if (ObjectUtils.isEmpty(userName) || ObjectUtils.isEmpty(passWord) ) {
+                           @RequestParam("userNote") String userNote, Model model) {
+        if (ObjectUtils.isEmpty(userName) || ObjectUtils.isEmpty(passWord)) {
             model.addAttribute("msg", "注册时用户名或者密码不能为空!");
             return "/register";
         } else {
