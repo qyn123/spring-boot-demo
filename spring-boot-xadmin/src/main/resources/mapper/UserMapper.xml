@@ -34,6 +34,11 @@
         select count(id) from users
         where  user_name=#{userName}
     </select>
+    <select id="selectUserByNameAndPassWord" resultType="com.qiaoyn.xadmin.entity.UserEntity">
+        select *
+        from users
+        where user_name=#{name} and pass_word = #{passWord} limit 1
+    </select>
 
 
     <update id="updateUser" parameterType="com.qiaoyn.xadmin.entity.UserEntity">

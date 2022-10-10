@@ -2,6 +2,7 @@ package com.qiaoyn.xadmin.mapper;
 
 import com.qiaoyn.xadmin.entity.UserEntity;
 import com.qiaoyn.xadmin.entity.dto.UserQuery;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -31,5 +32,7 @@ public interface UserMapper {
 
     // 判断用户名是否存在
     public int selectUserByName(String name);
+
+    UserEntity selectUserByNameAndPassWord(@Param("name") String name, @Param("passWord") String passWord);
 
 }

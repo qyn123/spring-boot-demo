@@ -31,4 +31,6 @@ public interface UserService {
     public boolean addUser(UserEntity user);
 
     public int selectUserByName(String name);
+
+    public UserEntity selectUserByNameAndPassWord(String name,String passWord);
 }

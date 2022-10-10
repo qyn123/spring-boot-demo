@@ -69,4 +69,9 @@ public class UserServiceImpl implements UserService {
     public int selectUserByName(String name) {
         return userDao.selectUserByName(name);
     }
+
+    @Override
+    public UserEntity selectUserByNameAndPassWord(String name, String passWord) {
+        return userDao.selectUserByNameAndPassWord(name, passWord);
+    }
 }
