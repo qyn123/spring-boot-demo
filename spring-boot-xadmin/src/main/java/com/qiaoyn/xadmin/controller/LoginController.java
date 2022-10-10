@@ -9,6 +9,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -48,6 +49,36 @@ public class LoginController {
         }
     }
 
+    @GetMapping("/register")
+    public String register() {
+        return "register";
+    }
+
+    @PostMapping("/register")
+    public String register(@RequestParam("userName") String userName,
+                           @RequestParam("passWord") String passWord,
+                           @RequestParam("userNote") String userNote,Model model) {
+        if (ObjectUtils.isEmpty(userName) || ObjectUtils.isEmpty(passWord) ) {
+            model.addAttribute("msg", "注册时用户名或者密码不能为空!");
+            return "/register";
+        } else {
+            int i = userService.selectUserByName(userName);
+            if (i > 0) {
+                model.addAttribute("msg", "用户已存在,请勿重复注册");
+                return "register";
+            } else {
+                UserEntity userEntity = new UserEntity();
+                userEntity.setUserName(userName).setPassWord(passWord).setUserNote(userNote);
+                boolean b = userService.addUser(userEntity);
+                if (b) {
+                    return "/login";
+                } else {
+                    model.addAttribute("msg", "注册失败,请重新注册");
+                    return "register";
+                }
+            }
+        }
+    }
 
     @GetMapping("/index")
     public String index() {
