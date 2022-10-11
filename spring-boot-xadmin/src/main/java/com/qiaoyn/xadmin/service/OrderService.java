@@ -11,4 +11,6 @@ import com.qiaoyn.xadmin.entity.dto.OrderQuery;
 public interface OrderService {
 
     PageInfo<OrderEntityVo> queryOrderList(OrderQuery orderQuery);
+
+    boolean deleteUserById(Integer id);
 }
