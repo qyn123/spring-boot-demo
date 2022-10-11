@@ -1,7 +1,11 @@
 package com.qiaoyn.xadmin.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.qiaoyn.xadmin.entity.OrderEntity;
 import com.qiaoyn.xadmin.entity.OrderEntityVo;
+import com.qiaoyn.xadmin.entity.UserEntity;
+import com.qiaoyn.xadmin.entity.dto.OrderQuery;
 import com.qiaoyn.xadmin.entity.enumerate.*;
 import com.qiaoyn.xadmin.mapper.OrderMapper;
 import com.qiaoyn.xadmin.service.OrderService;
@@ -26,19 +30,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderMapper orderMapper;
 
     @Override
-    public List<OrderEntityVo> queryOrderList() {
-        List<OrderEntityVo> list = new ArrayList<>();
-        List<OrderEntityVo> orderEntityList = orderMapper.queryOrderList();
-        orderEntityList.forEach(orderEntityVo -> {
-            OrderEntityVo vo  = new OrderEntityVo();
-            BeanUtils.copyProperties(orderEntityVo,vo);
-            vo.setOrderStatusName(OrderStatusEnum.getName(orderEntityVo.getOrderStatus()));
-            vo.setDeliveryStatusName(DeliveryStatusEnum.getName(orderEntityVo.getDeliveryStatus()));
-            vo.setPayMethodName(PayMethodEnum.getName(orderEntityVo.getPayMethod()));
-            vo.setSendMethodName(SendMethodEnum.getName(orderEntityVo.getSendMethod()));
-            vo.setPayStatusName(PayStatusEnum.getName(orderEntityVo.getPayStatus()));
-            list.add(vo);
-        });
-        return list;
+    public PageInfo<OrderEntityVo> queryOrderList(OrderQuery orderQuery) {
+        PageHelper.startPage(orderQuery.getPageNum(),orderQuery.getPageSize());
+        return new PageInfo<>(orderMapper.queryOrderList(orderQuery));
     }
 }

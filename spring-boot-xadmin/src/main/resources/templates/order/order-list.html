@@ -69,10 +69,9 @@
       <xblock>
         <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
         <button class="layui-btn" onclick="x_admin_show('添加用户','./order-add')"><i class="layui-icon"></i>添加</button>
-        <span class="x-right" style="line-height:40px">共有数据：88 条</span>
       </xblock>
 
-      <form method="get" th:action="@{/order-list}">
+      <form method="post" th:action="@{/order-list}">
         <table class="layui-table">
           <thead>
           <tr>
@@ -93,7 +92,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr th:each="order:${orderEntityList}">
+          <tr th:each="order:${page.list}">
             <td>
               <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i class="layui-icon">&#xe605;</i></div>
             </td>
@@ -120,15 +119,38 @@
         </table>
       </form>
 
-      <div class="page">
-        <div>
-          <a class="prev" href="">&lt;&lt;</a>
-          <a class="num" href="">1</a>
-          <span class="current">2</span>
-          <a class="num" href="">3</a>
-          <a class="num" href="">489</a>
-          <a class="next" href="">&gt;&gt;</a>
+      <!--显示分页信息-->
+      <div class="ui attached segment" >
+        <div class="col-md-6" style="text-align: center">
+          当前第 [[${page.pageNum}]]页,共 [[${page.pages}]] 页.一共 [[${page.total}]] 条记录
         </div>
+
+        <ul class="pagination pull-right no-margin" style="text-align: center">
+            <span th:if="${page.hasPreviousPage}">
+                <a th:href="'/order-list?pageNum=1'">首页</a>
+            </span>
+
+          <span class="prev" th:if="${page.hasPreviousPage}">
+                <a th:href="'/order-list?pageNum='+${page.prePage}">
+                    <i class="ace-icon fa fa-angle-double-left"></i>
+                </a>
+            </span>
+          <!--遍历条数-->
+          <span th:each="nav:${page.navigatepageNums}">
+                <a th:href="'/order-list?pageNum='+${nav}" th:text="${nav}" th:if="${nav != page.pageNum}"></a>
+                <span style="font-weight: bold;background: #6faed9;" th:if="${nav == page.pageNum}" th:text="${nav}" ></span>
+            </span>
+
+          <span class="next" th:if="${page.hasNextPage}">
+                <a th:href="'/order-list?pageNum='+${page.nextPage}">
+                    <i class="ace-icon fa fa-angle-double-right"></i>
+                </a>
+            </span>
+
+          <span>
+                <a th:href="'/order-list?pageNum='+${page.pages}">尾页</a>
+            </span>
+        </ul>
       </div>
 
     </div>

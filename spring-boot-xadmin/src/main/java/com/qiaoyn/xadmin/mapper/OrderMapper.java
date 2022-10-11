@@ -1,6 +1,7 @@
 package com.qiaoyn.xadmin.mapper;
 
 import com.qiaoyn.xadmin.entity.OrderEntityVo;
+import com.qiaoyn.xadmin.entity.dto.OrderQuery;
 
 import java.util.List;
 
@@ -14,5 +15,5 @@ public interface OrderMapper {
      * 查询所有订单信息
      * @return list
      */
-    List<OrderEntityVo> queryOrderList();
+    List<OrderEntityVo> queryOrderList(OrderQuery orderQuery);
 }

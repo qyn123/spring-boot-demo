@@ -4,7 +4,61 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qiaoyn.xadmin.mapper.OrderMapper">
 
-    <select id="queryOrderList" resultType="com.qiaoyn.xadmin.entity.OrderEntityVo">
-        SELECT * from `order`
+    <select id="queryOrderList" parameterType="com.qiaoyn.xadmin.entity.dto.OrderQuery" resultType="com.qiaoyn.xadmin.entity.OrderEntityVo">
+        SELECT
+        	`order_id`,
+        	`user_name`,
+        	`total_money`,
+        	`deal_money`,
+        CASE
+        	`order_status`
+        	WHEN 0 THEN
+        	'待确认'
+        	WHEN 1 THEN
+        	'已确认'
+        	WHEN 2 THEN
+        	'已收货'
+        	WHEN 3 THEN
+        	'已取消'
+        	WHEN 4 THEN
+        	'已完成' ELSE '已作废'
+        	END AS 'orderStatusName',
+        CASE
+        	`pay_status`
+        	WHEN 0 THEN
+        	'已支付' ELSE '未支付'
+        	END AS 'payStatusName',
+        CASE
+        	`pay_method`
+        	WHEN 0 THEN
+        	'支付宝'
+        	WHEN 1 THEN
+        	'微信' ELSE '货到付款'
+        	END AS 'payMethodName',
+        CASE
+        	`delivery_status`
+        	WHEN 0 THEN
+        	'未发货'
+        	WHEN 1 THEN
+        	'已发货' ELSE '已取消'
+        	END AS 'deliveryStatusName',
+        CASE
+        	`send_method`
+        	WHEN 0 THEN
+        	'京东物流'
+        	WHEN 1 THEN
+        	'顺丰物流'
+        	WHEN 2 THEN
+        	'邮政' ELSE '其他'
+        	END AS 'sendMethodName',
+        	`create_time`,
+        	`update_time`
+        FROM
+        	`order`
+        <where>
+            <if test="userName != null">
+                user_name = #{userName}
+            </if>
+        </where>
     </select>
 </mapper>

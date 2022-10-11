@@ -30,7 +30,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public PageInfo<UserEntity> listUserByName(UserQuery userQuery) {
         PageHelper.startPage(userQuery.getPageNum(),userQuery.getPageSize());
-        return new PageInfo<UserEntity>(userDao.listUserByName(userQuery));
+        List<UserEntity> list = userDao.listUserByName(userQuery);
+        System.out.println(list.size());
+        return new PageInfo<UserEntity>(list);
     }
 
     @Override

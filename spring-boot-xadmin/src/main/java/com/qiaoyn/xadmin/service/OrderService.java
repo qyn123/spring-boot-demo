@@ -1,8 +1,8 @@
 package com.qiaoyn.xadmin.service;
 
+import com.github.pagehelper.PageInfo;
 import com.qiaoyn.xadmin.entity.OrderEntityVo;
-
-import java.util.List;
+import com.qiaoyn.xadmin.entity.dto.OrderQuery;
 
 /**
  * @author qiaoyanan
@@ -10,5 +10,5 @@ import java.util.List;
  */
 public interface OrderService {
 
-    List<OrderEntityVo> queryOrderList();
+    PageInfo<OrderEntityVo> queryOrderList(OrderQuery orderQuery);
 }
