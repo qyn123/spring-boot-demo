@@ -35,36 +35,37 @@
 </div>
 <div class="x-body">
     <div class="layui-row">
-        <form class="layui-form layui-col-md12 x-so">
-            <input class="layui-input" placeholder="开始日" name="start" id="start">
-            <input class="layui-input" placeholder="截止日" name="end" id="end">
+        <form class="layui-form layui-col-md12 x-so" method="post" th:action="@{/order-list}">
+            <input class="layui-input" placeholder="开始日" name="beginDate" id="start">
+            <input class="layui-input" placeholder="截止日" name="endDate" id="end">
             <div class="layui-input-inline">
-                <select name="contrller">
-                    <option>支付状态</option>
-                    <option>已支付</option>
-                    <option>未支付</option>
+                <select name="payStatus">
+                    <option value="">支付状态</option>
+                    <option th:each="item:${payStatusList}"
+                            th:value="${item.keyName}" th:text="${item.valueName}"
+                            th:selected="payStatus == ${item.keyName}">
+                    </option>
                 </select>
             </div>
             <div class="layui-input-inline">
-                <select name="contrller">
-                    <option>支付方式</option>
-                    <option>支付宝</option>
-                    <option>微信</option>
-                    <option>货到付款</option>
+                <select name="payMethod">
+                    <option value="">支付方式</option>
+                    <option th:each="item:${payMethodList}"
+                            th:value="${item.keyName}" th:text="${item.valueName}"
+                            th:selected="payMethod == ${item.keyName}">
+                    </option>
                 </select>
             </div>
             <div class="layui-input-inline">
-                <select name="contrller">
+                <select name="orderStatus">
                     <option value="">订单状态</option>
-                    <option value="0">待确认</option>
-                    <option value="1">已确认</option>
-                    <option value="2">已收货</option>
-                    <option value="3">已取消</option>
-                    <option value="4">已完成</option>
-                    <option value="5">已作废</option>
+                    <option th:each="item:${orderStatusList}"
+                            th:value="${item.keyName}" th:text="${item.valueName}"
+                            th:selected="orderStatus == ${item.keyName}">
+                    </option>
                 </select>
             </div>
-            <input type="text" name="username" placeholder="请输入订单号" autocomplete="off" class="layui-input">
+            <input type="text" name="orderId" placeholder="请输入订单号" autocomplete="off" class="layui-input">
             <button class="layui-btn" lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
         </form>
     </div>

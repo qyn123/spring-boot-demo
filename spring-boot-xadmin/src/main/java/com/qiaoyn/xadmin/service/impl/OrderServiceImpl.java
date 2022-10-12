@@ -6,9 +6,13 @@ import com.qiaoyn.xadmin.entity.OrderEntityVo;
 import com.qiaoyn.xadmin.entity.dto.OrderQuery;
 import com.qiaoyn.xadmin.mapper.OrderMapper;
 import com.qiaoyn.xadmin.service.OrderService;
+import com.qiaoyn.xadmin.util.DateUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 /**
  * @author qiaoyanan
@@ -24,6 +28,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public PageInfo<OrderEntityVo> queryOrderList(OrderQuery orderQuery) {
         PageHelper.startPage(orderQuery.getPageNum(),orderQuery.getPageSize());
+        if (StringUtils.isNotBlank(orderQuery.getBeginDate())) {
+            orderQuery.setBeginDate(DateUtil.getStartTime(orderQuery.getBeginDate()));
+        }
+        if (StringUtils.isNotBlank(orderQuery.getEndDate())) {
+            orderQuery.setEndDate(DateUtil.getEndTime(orderQuery.getEndDate()));
+        }
+        System.out.println("size================>" +orderMapper.queryOrderList(orderQuery).size());
         return new PageInfo<>(orderMapper.queryOrderList(orderQuery));
     }
 

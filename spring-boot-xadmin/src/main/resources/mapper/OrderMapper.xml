@@ -59,9 +59,27 @@
         FROM
         	`order`
         <where>
-            <if test="userName != null">
-                user_name = #{userName}
+            <if test="userName != null and userName != ''">
+               and user_name = #{userName}
             </if>
+			<if test="payStatus != null">
+				and pay_status = #{payStatus}
+			</if>
+			<if test="orderId != null ">
+				and order_id = #{orderId}
+			</if>
+			<if test="payMethod != null">
+				and pay_method = #{payMethod}
+			</if>
+			<if test="orderStatus != null">
+				and order_status = #{orderStatus}
+			</if>
+			<if test="beginDate != null and beginDate != ''">
+				and create_time &gt;= #{beginDate}
+			</if>
+			<if test="endDate != null and endDate != ''">
+				and create_time &lt;= #{endDate}
+			</if>
         </where>
     </select>
 </mapper>

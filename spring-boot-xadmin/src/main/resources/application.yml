@@ -15,3 +15,9 @@ mybatis:
   mapper-locations: classpath:/mapper/*.xml   #  mapper位置
   configuration:
     map-underscore-to-camel-case: true  # 驼峰转换
+logging:
+  level:
+    com:
+      qiaoyn:
+        xadmin:
+          mapper: debug
