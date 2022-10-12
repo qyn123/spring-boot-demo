@@ -54,8 +54,8 @@
         	WHEN 2 THEN
         	'邮政' ELSE '其他'
         	END AS 'sendMethodName',
-        	`create_time`,
-        	`update_time`
+			DATE_FORMAT(`create_time`,'%Y年%m月%d日 %H:%i:%s') as `create_time`,
+			DATE_FORMAT(`update_time`,'%Y年%m月%d日 %H:%i:%s') as `update_time`
         FROM
         	`order`
         <where>

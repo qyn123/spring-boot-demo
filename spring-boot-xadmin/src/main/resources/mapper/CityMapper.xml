@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qiaoyn.xadmin.mapper.CityMapper">
+
+	<select id="queryProvinceList" resultType="com.qiaoyn.xadmin.entity.Province">
+		select `area_code` as pCode, `area_name` as pName, `parent_id` as pId from city where parent_id = 0
+	</select>
+	<select id="queryCityList" resultType="com.qiaoyn.xadmin.entity.City">
+		select `area_code` as cCode, `area_name` as cName, `parent_id` as cId from city where parent_id = #{key}
+	</select>
+</mapper>
