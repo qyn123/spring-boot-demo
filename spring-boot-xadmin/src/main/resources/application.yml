@@ -1,6 +1,10 @@
 server:
   port: 8090
 spring:
+  redis:
+    host: localhost
+    password:
+    port: 6379
   thymeleaf:
     cache: false
     prefix: classpath:/templates/
