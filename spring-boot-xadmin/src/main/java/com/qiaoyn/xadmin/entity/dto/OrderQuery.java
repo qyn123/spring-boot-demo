@@ -18,7 +18,7 @@ public class OrderQuery {
     private Integer pageSize  = 5;
     // 根据用户查询
     private String userName;
-    private Integer orderId;
+    private String orderId;
     private Integer payStatus;
     private Integer payMethod;
     private Integer orderStatus;

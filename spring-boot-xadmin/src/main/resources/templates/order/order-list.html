@@ -38,6 +38,7 @@
         <form class="layui-form layui-col-md12 x-so" method="post" th:action="@{/order-list}">
             <input class="layui-input" placeholder="开始日" name="beginDate" id="start">
             <input class="layui-input" placeholder="截止日" name="endDate" id="end">
+            <input class="layui-input" placeholder="收货人" name="userName" id="userName">
             <div class="layui-input-inline">
                 <select name="payStatus">
                     <option value="">支付状态</option>
@@ -71,7 +72,7 @@
     </div>
     <xblock>
         <button class="layui-btn layui-btn-danger" onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
-        <button class="layui-btn" onclick="x_admin_show('添加用户','./order-add')"><i class="layui-icon"></i>添加</button>
+        <a th:href="@{/order-add}" class="layui-btn"><i class="layui-icon"></i>添加</a>
     </xblock>
 
     <form method="post" th:action="@{/order-list}">
@@ -107,8 +108,8 @@
                 <td th:text="${order.dealMoney}">7854.10</td>
                 <td th:text="${order.orderStatusName}">待确认</td>
                 <td th:text="${order.payStatusName}">未支付</td>
-                <td th:text="${order.payMethodName}">未发货</td>
-                <td th:text="${order.deliveryStatusName}">其他方式</td>
+                <td th:text="${order.deliveryStatusName}">未发货</td>
+                <td th:text="${order.payMethodName}">其他方式</td>
                 <td th:text="${order.sendMethodName}">申通物流</td>
                 <td th:text="${order.createTime}">2017-08-17 18:22</td>
                 <td class="td-manage">

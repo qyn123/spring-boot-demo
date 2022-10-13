@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageInfo;
 import com.qiaoyn.xadmin.entity.ConfigEntity;
+import com.qiaoyn.xadmin.entity.OrderEntity;
 import com.qiaoyn.xadmin.entity.OrderEntityVo;
+import com.qiaoyn.xadmin.entity.UserEntity;
 import com.qiaoyn.xadmin.entity.dto.OrderQuery;
 import com.qiaoyn.xadmin.mapper.ConfigMapper;
 import com.qiaoyn.xadmin.service.OrderService;
@@ -40,13 +42,32 @@ public class OrderController {
     private RedisTemplate<String, Object> redisTemplate;
 
     @GetMapping("/order-add")
-    public String orderAdd() {
+    public String orderAdd(Model model) {
+        log.info("==============================支付状态开始================================");
+        List<ConfigEntity> payStatusList = getCatchConfigList("payStatusKey", "payStatus", 3600, TimeUnit.SECONDS);
+        model.addAttribute("payStatusList", payStatusList);
+        log.info("==============================支付状态结束================================");
+        log.info("==============================支付方式开始================================");
+        List<ConfigEntity> payMethodList = getCatchConfigList("payMethodKey", "payMethod", 3600, TimeUnit.SECONDS);
+        model.addAttribute("payMethodList", payMethodList);
+        log.info("==============================支付方式结束================================");
+        log.info("==============================订单状态开始================================");
+        List<ConfigEntity> orderStatusList = getCatchConfigList("orderStatusKey", "orderStatus", 3600, TimeUnit.SECONDS);
+        model.addAttribute("orderStatusList", orderStatusList);
+        log.info("==============================订单状态结束================================");
+        log.info("==============================发货状态开始================================");
+        List<ConfigEntity> deliveryStatusList = getCatchConfigList("deliveryStatusKey", "deliveryStatus", 3600, TimeUnit.SECONDS);
+        model.addAttribute("deliveryStatusList", deliveryStatusList);
+        log.info("==============================发货状态结束================================");
+        log.info("==============================配送方式开始================================");
+        List<ConfigEntity> sendMethodList = getCatchConfigList("sendMethodKey", "sendMethod", 3600, TimeUnit.SECONDS);
+        model.addAttribute("sendMethodList", sendMethodList);
+        log.info("==============================配送方式结束================================");
         return "/order/order-add";
     }
 
     @GetMapping("/order-list")
-    public String orderList(Model model, OrderQuery orderQuery, HttpSession session) {
-        orderQuery.setUserName(String.valueOf(session.getAttribute("loginUser")));
+    public String orderList(Model model, OrderQuery orderQuery) {
         log.info("==============================支付状态开始================================");
         List<ConfigEntity> payStatusList = getCatchConfigList("payStatusKey", "payStatus", 3600, TimeUnit.SECONDS);
         model.addAttribute("payStatusList", payStatusList);
@@ -65,8 +86,7 @@ public class OrderController {
     }
 
     @PostMapping("/order-list")
-    public String orderListByName(Model model, OrderQuery orderQuery, HttpSession session) {
-        orderQuery.setUserName(String.valueOf(session.getAttribute("loginUser")));
+    public String orderListByName(Model model, OrderQuery orderQuery) {
         log.info("==============================支付状态开始================================");
         List<ConfigEntity> payStatusList = getCatchConfigList("payStatusKey", "payStatus", 3600, TimeUnit.SECONDS);
         model.addAttribute("payStatusList", payStatusList);
@@ -86,7 +106,7 @@ public class OrderController {
 
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") Integer id, RedirectAttributes attributes) {
+    public String delete(@PathVariable("id") String id, RedirectAttributes attributes) {
         boolean b = orderService.deleteUserById(id);
         if (b) {
             return "redirect:/order-list";
@@ -97,10 +117,11 @@ public class OrderController {
 
     /**
      * 下拉列表缓存
-     * @param catchKey 缓存key
-     * @param group 查询组
-     * @param timeStamp  时间戳
-     * @param timeUnit 时间单位
+     *
+     * @param catchKey  缓存key
+     * @param group     查询组
+     * @param timeStamp 时间戳
+     * @param timeUnit  时间单位
      */
     private List<ConfigEntity> getCatchConfigList(String catchKey, String group, long timeStamp, TimeUnit timeUnit) {
         List<ConfigEntity> list;
@@ -116,6 +137,17 @@ public class OrderController {
             list = JSONObject.parseArray(string, ConfigEntity.class);
         }
         return list;
+    }
+
+    @PostMapping("/edit-order")
+    public String editOrder(OrderEntity orderEntity, RedirectAttributes attributes) {
+        System.out.println(orderEntity);
+        boolean b = orderService.addOrder(orderEntity);
+        if (b) {
+            return "redirect:/order-list";
+        } else {
+            return "redirect:/order-list";
+        }
     }
 
 }

@@ -1,6 +1,7 @@
 package com.qiaoyn.xadmin.service;
 
 import com.github.pagehelper.PageInfo;
+import com.qiaoyn.xadmin.entity.OrderEntity;
 import com.qiaoyn.xadmin.entity.OrderEntityVo;
 import com.qiaoyn.xadmin.entity.dto.OrderQuery;
 
@@ -12,5 +13,7 @@ public interface OrderService {
 
     PageInfo<OrderEntityVo> queryOrderList(OrderQuery orderQuery);
 
-    boolean deleteUserById(Integer id);
+    boolean deleteUserById(String id);
+
+    boolean addOrder(OrderEntity orderEntity);
 }

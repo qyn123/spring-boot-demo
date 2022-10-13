@@ -3,6 +3,11 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.qiaoyn.xadmin.mapper.OrderMapper">
+    <insert id="addOrder">
+		INSERT INTO `order` ( `order_id`, `user_name`, `total_money`, `deal_money`, `order_status`, `pay_status`, `pay_method`, `delivery_status`, `send_method` )
+		VALUES
+		( #{orderId}, #{userName}, #{totalMoney}, #{dealMoney}, #{orderStatus}, #{payStatus}, #{payMethod}, #{deliveryStatus}, #{sendMethod} );
+	</insert>
     <delete id="deleteUserById">
 		delete from `order` where order_id = #{id}
 	</delete>
@@ -65,7 +70,7 @@
 			<if test="payStatus != null">
 				and pay_status = #{payStatus}
 			</if>
-			<if test="orderId != null ">
+			<if test="orderId != null and orderId != ''">
 				and order_id = #{orderId}
 			</if>
 			<if test="payMethod != null">
@@ -81,5 +86,6 @@
 				and create_time &lt;= #{endDate}
 			</if>
         </where>
+        order by create_time desc
     </select>
 </mapper>

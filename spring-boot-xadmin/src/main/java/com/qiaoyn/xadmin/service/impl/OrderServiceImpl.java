@@ -2,6 +2,7 @@ package com.qiaoyn.xadmin.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.qiaoyn.xadmin.entity.OrderEntity;
 import com.qiaoyn.xadmin.entity.OrderEntityVo;
 import com.qiaoyn.xadmin.entity.dto.OrderQuery;
 import com.qiaoyn.xadmin.mapper.OrderMapper;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * @author qiaoyanan
@@ -39,11 +41,17 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean deleteUserById(Integer id) {
+    public boolean deleteUserById(String id) {
         int i = orderMapper.deleteUserById(id);
         if (i > 0) {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean addOrder(OrderEntity orderEntity) {
+        orderEntity.setOrderId(UUID.randomUUID().toString().replaceAll("-",""));
+        return orderMapper.addOrder(orderEntity) > 0;
     }
 }

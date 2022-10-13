@@ -23,126 +23,111 @@
 
 <body>
 <div class="x-body">
-    <form class="layui-form">
+    <form class="layui-form" method="post" th:action="@{/edit-order}">
         <div class="layui-form-item">
-            <label for="username" class="layui-form-label">
-                <span class="x-red">*</span>用户名
-            </label>
-            <div class="layui-input-inline">
-                <input type="text" id="username" name="username" required="" lay-verify="required"
-                       autocomplete="off" class="layui-input">
-            </div>
-        </div>
-        <div class="layui-form-item">
-            <label for="username" class="layui-form-label">
+            <label for="userName" class="layui-form-label">
                 <span class="x-red">*</span>收货人
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="username" name="username" required="" lay-verify="required"
+                <input type="text" id="userName" name="userName" required="" lay-verify="required"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label for="phone" class="layui-form-label">
-                <span class="x-red">*</span>手机
+            <label for="totalMoney" class="layui-form-label">
+                <span>总金额</span>
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="phone" name="phone" required="" lay-verify="phone"
+                <input type="text" id="totalMoney" name="totalMoney" required="" lay-verify="required"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label for="username" class="layui-form-label">
-                <span class="x-red">*</span>收货地址
+            <label for="dealMoney" class="layui-form-label">
+                <span>应付金额</span>
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="username" name="username" required="" lay-verify="required"
+                <input type="text" id="dealMoney" name="dealMoney" required="" lay-verify="required"
                        autocomplete="off" class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
-            <label for="username" class="layui-form-label">
+            <label  class="layui-form-label">
                 <span class="x-red">*</span>配送物流
             </label>
             <div class="layui-input-inline">
-                <select id="shipping" name="shipping" class="valid">
-                    <option value="shentong">申通物流</option>
-                    <option value="shunfeng">顺丰物流</option>
+                <select name="sendMethod">
+                    <option value="">配送方式</option>
+                    <option th:each="item:${sendMethodList}"
+                            th:value="${item.keyName}" th:text="${item.valueName}"
+                            th:selected="orderStatus == ${item.keyName}">
+                    </option>
                 </select>
             </div>
         </div>
         <div class="layui-form-item">
-            <label for="username" class="layui-form-label">
+            <label class="layui-form-label">
                 <span class="x-red">*</span>支付方式
             </label>
             <div class="layui-input-inline">
-                <select name="contrller">
-                    <option>支付方式</option>
-                    <option>支付宝</option>
-                    <option>微信</option>
-                    <option>货到付款</option>
+                <select name="payMethod">
+                    <option value="">支付方式</option>
+                    <option th:each="item:${payMethodList}"
+                            th:value="${item.keyName}" th:text="${item.valueName}"
+                            th:selected="payMethod == ${item.keyName}">
+                    </option>
                 </select>
             </div>
         </div>
         <div class="layui-form-item">
-            <label for="L_email" class="layui-form-label">
-                <span class="x-red">*</span>发票抬头
+            <label class="layui-form-label">
+                <span class="x-red">*</span>订单状态
             </label>
             <div class="layui-input-inline">
-                <input type="text" id="L_email" name="email" required="" lay-verify="email"
-                       autocomplete="off" class="layui-input">
-            </div>
-            <div class="layui-form-mid layui-word-aux">
-                <span class="x-red">*</span>
+                <select name="orderStatus">
+                    <option value="">订单状态</option>
+                    <option th:each="item:${orderStatusList}"
+                            th:value="${item.keyName}" th:text="${item.valueName}"
+                            th:selected="orderStatus == ${item.keyName}">
+                    </option>
+                </select>
             </div>
         </div>
-        <div class="layui-form-item layui-form-text">
-            <label for="desc" class="layui-form-label">
-                商品增加
+        <div class="layui-form-item">
+            <label  class="layui-form-label">
+                <span class="x-red">*</span>支付状态
             </label>
-            <div class="layui-input-block">
-                <table class="layui-table">
-                    <tbody>
-                    <tr>
-                        <td>haier海尔 BC-93TMPF 93升单门冰箱
+            <div class="layui-input-inline">
+                <select name="payStatus">
+                    <option value="">支付状态</option>
+                    <option th:each="item:${payStatusList}"
+                            th:value="${item.keyName}" th:text="${item.valueName}"
+                            th:selected="payStatus == ${item.keyName}">
+                    </option>
+                </select>
             </div>
-            </td>
-            <td>0.01
+        </div>
+        <div class="layui-form-item">
+            <label  class="layui-form-label">
+                <span class="x-red">*</span>发货状态
+            </label>
+            <div class="layui-input-inline">
+                <select name="deliveryStatus">
+                    <option value="">发货状态</option>
+                    <option th:each="item:${deliveryStatusList}"
+                            th:value="${item.keyName}" th:text="${item.valueName}"
+                            th:selected="orderStatus == ${item.keyName}">
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label"/>
+            <button class="layui-btn"  th:href="@{/edit-order}">
+                增加
+            </button>
         </div>
     </form>
-    <td>984
-</div>
-</td>
-<td>1</td>
-<td>删除</td>
-</tr>
-<tr>
-    <td>haier海尔 BC-93TMPF 93升单门冰箱</div></td>
-    <td>0.01</div></td>
-    <td>984</div></td>
-    <td>1</td>
-    <td>删除</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="layui-form-item layui-form-text">
-    <label for="desc" class="layui-form-label">
-        描述
-    </label>
-    <div class="layui-input-block">
-        <textarea placeholder="请输入内容" id="desc" name="desc" class="layui-textarea"></textarea>
-    </div>
-</div>
-<div class="layui-form-item">
-    <label for="L_repass" class="layui-form-label">
-    </label>
-    <button class="layui-btn" lay-filter="add" lay-submit="">
-        增加
-    </button>
-</div>
-</form>
 </div>
 <script>
     layui.use(['form', 'layer'], function () {

@@ -1,5 +1,6 @@
 package com.qiaoyn.xadmin.mapper;
 
+import com.qiaoyn.xadmin.entity.OrderEntity;
 import com.qiaoyn.xadmin.entity.OrderEntityVo;
 import com.qiaoyn.xadmin.entity.dto.OrderQuery;
 import org.apache.ibatis.annotations.Param;
@@ -18,5 +19,7 @@ public interface OrderMapper {
      */
     List<OrderEntityVo> queryOrderList(OrderQuery orderQuery);
 
-    int deleteUserById(@Param("id") Integer id);
+    int deleteUserById(@Param("id") String id);
+
+    int addOrder(OrderEntity orderEntity);
 }

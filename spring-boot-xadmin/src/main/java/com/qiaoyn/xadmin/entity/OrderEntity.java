@@ -19,7 +19,7 @@ import java.io.Serializable;
 @Accessors(chain = true)
 public class OrderEntity extends DateEntity implements Serializable {
 
-    private Integer orderId;
+    private String orderId;
     private String userName;
     private Double totalMoney;
     private Double dealMoney;
