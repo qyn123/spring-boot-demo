@@ -48,48 +48,15 @@ public class OrderController {
     public String orderList(Model model, OrderQuery orderQuery, HttpSession session) {
         orderQuery.setUserName(String.valueOf(session.getAttribute("loginUser")));
         log.info("==============================支付状态开始================================");
-        List<ConfigEntity> payStatusList;
-        if (StringUtils.isEmpty(redisTemplate.opsForValue().get("payStatusKey"))) {
-            log.info("走的数据库");
-            payStatusList = configMapper.queryList("payStatus");
-            String s = JSON.toJSON(payStatusList).toString();
-            redisTemplate.opsForValue().set("payStatusKey", s, 1800, TimeUnit.SECONDS);
-        } else {
-            log.info("走的Redis");
-            String string = String.valueOf(redisTemplate.opsForValue().get("payStatusKey"));
-            log.info("支付状态:{}", string);
-            payStatusList = JSONObject.parseArray(string, ConfigEntity.class);
-        }
+        List<ConfigEntity> payStatusList = getCatchConfigList("payStatusKey", "payStatus", 3600, TimeUnit.SECONDS);
         model.addAttribute("payStatusList", payStatusList);
         log.info("==============================支付状态结束================================");
         log.info("==============================支付方式开始================================");
-        List<ConfigEntity> payMethodList;
-        if (StringUtils.isEmpty(redisTemplate.opsForValue().get("payMethodKey"))) {
-            log.info("走的数据库");
-            payMethodList = configMapper.queryList("payMethod");
-            String s = JSON.toJSON(payStatusList).toString();
-            redisTemplate.opsForValue().set("payMethodKey", s, 1800, TimeUnit.SECONDS);
-        } else {
-            log.info("走的Redis");
-            String string = String.valueOf(redisTemplate.opsForValue().get("payMethodKey"));
-            log.info("支付方式:{}", string);
-            payMethodList = JSONObject.parseArray(string, ConfigEntity.class);
-        }
+        List<ConfigEntity> payMethodList = getCatchConfigList("payMethodKey", "payMethod", 3600, TimeUnit.SECONDS);
         model.addAttribute("payMethodList", payMethodList);
         log.info("==============================支付方式结束================================");
         log.info("==============================订单状态开始================================");
-        List<ConfigEntity> orderStatusList;
-        if (StringUtils.isEmpty(redisTemplate.opsForValue().get("orderStatusKey"))) {
-            log.info("走的数据库");
-            orderStatusList = configMapper.queryList("orderStatus");
-            String s = JSON.toJSON(payStatusList).toString();
-            redisTemplate.opsForValue().set("orderStatusKey", s, 1800, TimeUnit.SECONDS);
-        } else {
-            log.info("走的Redis");
-            String string = String.valueOf(redisTemplate.opsForValue().get("orderStatusKey"));
-            log.info("订单状态:{}", string);
-            orderStatusList = JSONObject.parseArray(string, ConfigEntity.class);
-        }
+        List<ConfigEntity> orderStatusList = getCatchConfigList("orderStatusKey", "orderStatus", 3600, TimeUnit.SECONDS);
         model.addAttribute("orderStatusList", orderStatusList);
         log.info("==============================订单状态结束================================");
         PageInfo<OrderEntityVo> orderPageInfo = orderService.queryOrderList(orderQuery);
@@ -101,48 +68,15 @@ public class OrderController {
     public String orderListByName(Model model, OrderQuery orderQuery, HttpSession session) {
         orderQuery.setUserName(String.valueOf(session.getAttribute("loginUser")));
         log.info("==============================支付状态开始================================");
-        List<ConfigEntity> payStatusList;
-        if (StringUtils.isEmpty(redisTemplate.opsForValue().get("payStatusKey"))) {
-            log.info("走的数据库");
-            payStatusList = configMapper.queryList("payStatus");
-            String s = JSON.toJSON(payStatusList).toString();
-            redisTemplate.opsForValue().set("payStatusKey", s, 1800, TimeUnit.SECONDS);
-        } else {
-            log.info("走的Redis");
-            String string = String.valueOf(redisTemplate.opsForValue().get("payStatusKey"));
-            log.info("支付状态:{}", string);
-            payStatusList = JSONObject.parseArray(string, ConfigEntity.class);
-        }
+        List<ConfigEntity> payStatusList = getCatchConfigList("payStatusKey", "payStatus", 3600, TimeUnit.SECONDS);
         model.addAttribute("payStatusList", payStatusList);
         log.info("==============================支付状态结束================================");
         log.info("==============================支付方式开始================================");
-        List<ConfigEntity> payMethodList;
-        if (StringUtils.isEmpty(redisTemplate.opsForValue().get("payMethodKey"))) {
-            log.info("走的数据库");
-            payMethodList = configMapper.queryList("payMethod");
-            String s = JSON.toJSON(payStatusList).toString();
-            redisTemplate.opsForValue().set("payMethodKey", s, 1800, TimeUnit.SECONDS);
-        } else {
-            log.info("走的Redis");
-            String string = String.valueOf(redisTemplate.opsForValue().get("payMethodKey"));
-            log.info("支付方式:{}", string);
-            payMethodList = JSONObject.parseArray(string, ConfigEntity.class);
-        }
+        List<ConfigEntity> payMethodList = getCatchConfigList("payMethodKey", "payMethod", 3600, TimeUnit.SECONDS);
         model.addAttribute("payMethodList", payMethodList);
         log.info("==============================支付方式结束================================");
         log.info("==============================订单状态开始================================");
-        List<ConfigEntity> orderStatusList;
-        if (StringUtils.isEmpty(redisTemplate.opsForValue().get("orderStatusKey"))) {
-            log.info("走的数据库");
-            orderStatusList = configMapper.queryList("orderStatus");
-            String s = JSON.toJSON(payStatusList).toString();
-            redisTemplate.opsForValue().set("orderStatusKey", s, 1800, TimeUnit.SECONDS);
-        } else {
-            log.info("走的Redis");
-            String string = String.valueOf(redisTemplate.opsForValue().get("orderStatusKey"));
-            log.info("订单状态:{}", string);
-            orderStatusList = JSONObject.parseArray(string, ConfigEntity.class);
-        }
+        List<ConfigEntity> orderStatusList = getCatchConfigList("orderStatusKey", "orderStatus", 3600, TimeUnit.SECONDS);
         model.addAttribute("orderStatusList", orderStatusList);
         log.info("==============================订单状态结束================================");
         PageInfo<OrderEntityVo> orderPageInfo = orderService.queryOrderList(orderQuery);
@@ -159,6 +93,29 @@ public class OrderController {
         } else {
             return "redirect:/order-list";
         }
+    }
+
+    /**
+     * 下拉列表缓存
+     * @param catchKey 缓存key
+     * @param group 查询组
+     * @param timeStamp  时间戳
+     * @param timeUnit 时间单位
+     */
+    private List<ConfigEntity> getCatchConfigList(String catchKey, String group, long timeStamp, TimeUnit timeUnit) {
+        List<ConfigEntity> list;
+        if (StringUtils.isEmpty(redisTemplate.opsForValue().get(catchKey))) {
+            log.info("走的数据库");
+            list = configMapper.queryList(group);
+            String s = JSON.toJSON(list).toString();
+            redisTemplate.opsForValue().set(catchKey, s, timeStamp, timeUnit);
+        } else {
+            log.info("走的Redis");
+            String string = String.valueOf(redisTemplate.opsForValue().get(catchKey));
+            log.info("支付状态:{}", string);
+            list = JSONObject.parseArray(string, ConfigEntity.class);
+        }
+        return list;
     }
 
 }
