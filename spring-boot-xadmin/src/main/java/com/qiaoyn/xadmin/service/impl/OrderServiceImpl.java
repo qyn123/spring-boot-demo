@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -50,8 +51,20 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    @Transactional
     public boolean addOrder(OrderEntity orderEntity) {
         orderEntity.setOrderId(UUID.randomUUID().toString().replaceAll("-",""));
         return orderMapper.addOrder(orderEntity) > 0;
+    }
+
+    @Override
+    public OrderEntityVo queryOrderById(String id) {
+        return orderMapper.queryOrderById(id);
+    }
+
+    @Override
+    @Transactional
+    public boolean updateOrder(OrderEntity orderEntity) {
+        return orderMapper.updateOrder(orderEntity) > 0;
     }
 }

@@ -16,4 +16,9 @@ public interface OrderService {
     boolean deleteUserById(String id);
 
     boolean addOrder(OrderEntity orderEntity);
+
+    boolean updateOrder(OrderEntity orderEntity);
+
+
+    OrderEntityVo  queryOrderById(String id);
 }

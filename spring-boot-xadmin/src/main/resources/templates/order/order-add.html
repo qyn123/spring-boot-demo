@@ -60,7 +60,7 @@
                     <option value="">配送方式</option>
                     <option th:each="item:${sendMethodList}"
                             th:value="${item.keyName}" th:text="${item.valueName}"
-                            th:selected="orderStatus == ${item.keyName}">
+                            th:selected="sendMethod == ${item.keyName}">
                     </option>
                 </select>
             </div>
@@ -116,7 +116,7 @@
                     <option value="">发货状态</option>
                     <option th:each="item:${deliveryStatusList}"
                             th:value="${item.keyName}" th:text="${item.valueName}"
-                            th:selected="orderStatus == ${item.keyName}">
+                            th:selected="deliveryStatus == ${item.keyName}">
                     </option>
                 </select>
             </div>

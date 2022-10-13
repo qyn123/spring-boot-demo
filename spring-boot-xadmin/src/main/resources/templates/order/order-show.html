@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>修改用户</title>
+    <div class="ui container">
+        <form class="ui form" th:action="@{/edit-order}" method="post" th:object="${order}">
+            <input type="hidden" th:value="*{orderId}" name="orderId">
+            <div class="field">
+                <label>收货人</label>
+                <input type="text" name="userName" required th:value="*{userName}">
+            </div>
+            <div class="field">
+                <label>总金额</label>
+                <input type="text" name="totalMoney" required th:value="*{totalMoney}">
+            </div>
+            <div class="field">
+                <label>应付金额</label>
+                <input type="text" name="dealMoney" required th:value="*{dealMoney}">
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>配送方式
+                </label>
+                <div class="layui-input-inline">
+                    <select name="sendMethod">
+                        <option th:each="item:${sendMethodList}"
+                                th:value="${item.keyName}" th:text="${item.valueName}"
+                                th:selected = "*{sendMethod} eq ${item.keyName}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>支付方式
+                </label>
+                <div class="layui-input-inline">
+                    <select name="payMethod">
+                        <option th:each="item:${payMethodList}"
+                                th:value="${item.keyName}" th:text="${item.valueName}"
+                                th:selected="*{payMethod} eq ${item.keyName}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>订单状态
+                </label>
+                <div class="layui-input-inline">
+                    <select name="orderStatus">
+                        <option th:each="item:${orderStatusList}"
+                                th:value="${item.keyName}" th:text="${item.valueName}"
+                                th:selected="*{orderStatus} eq ${item.keyName}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>支付状态
+                </label>
+                <div class="layui-input-inline">
+                    <select name="payStatus">
+                        <option th:each="item:${payStatusList}"
+                                th:value="${item.keyName}" th:text="${item.valueName}"
+                                th:selected="*{payStatus} eq ${item.keyName}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">
+                    <span class="x-red">*</span>发货状态
+                </label>
+                <div class="layui-input-inline">
+                    <select name="deliveryStatus">
+                        <option th:each="item:${deliveryStatusList}"
+                                th:value="${item.keyName}" th:text="${item.valueName}"
+                                th:selected="*{deliveryStatus} eq ${item.keyName}">
+                        </option>
+                    </select>
+                </div>
+            </div>
+            <button class="ui button" type="submit">提交</button>
+        </form>
+    </div>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+    <script>
+        $(".message .close").on('click', function () {
+            $(this).closest(".message")
+                .transition("fade");
+        })
+    </script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+</head>
+
+</html>

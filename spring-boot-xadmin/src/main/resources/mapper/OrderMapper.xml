@@ -8,7 +8,8 @@
 		VALUES
 		( #{orderId}, #{userName}, #{totalMoney}, #{dealMoney}, #{orderStatus}, #{payStatus}, #{payMethod}, #{deliveryStatus}, #{sendMethod} );
 	</insert>
-    <delete id="deleteUserById">
+
+	<delete id="deleteUserById">
 		delete from `order` where order_id = #{id}
 	</delete>
 
@@ -88,4 +89,37 @@
         </where>
         order by create_time desc
     </select>
+	<select id="queryOrderById" resultType="com.qiaoyn.xadmin.entity.OrderEntityVo">
+		       SELECT
+        	`order_id`,
+        	`user_name`,
+        	`total_money`,
+        	`deal_money`,
+        	`order_status`,
+        	`pay_status`,
+        	`pay_method`,
+        	`delivery_status`,
+        	`send_method`,
+			DATE_FORMAT(`create_time`,'%Y年%m月%d日 %H:%i:%s') as `create_time`,
+			DATE_FORMAT(`update_time`,'%Y年%m月%d日 %H:%i:%s') as `update_time`
+        FROM
+        	`order`
+        	where
+			order_id = #{orderId}
+	</select>
+
+	<update id="updateOrder" parameterType="com.qiaoyn.xadmin.entity.OrderEntity">
+		UPDATE `order`
+		<trim prefix="set" suffixOverrides=",">
+			<if test="userName !=null and userName != ''" >user_name=#{userName},</if>
+			<if test="totalMoney !=null">total_money=#{totalMoney},</if>
+			<if test="dealMoney !=null">deal_money=#{dealMoney},</if>
+			<if test="orderStatus !=null">order_status=#{orderStatus},</if>
+			<if test="payStatus !=null">pay_status=#{payStatus},</if>
+			<if test="payMethod !=null">pay_method=#{payMethod},</if>
+			<if test="deliveryStatus !=null">delivery_status=#{deliveryStatus},</if>
+			<if test="sendMethod !=null">send_method=#{sendMethod},</if>
+		</trim>
+		WHERE order_id = #{orderId}
+	</update>
 </mapper>

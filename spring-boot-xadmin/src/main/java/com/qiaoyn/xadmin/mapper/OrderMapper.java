@@ -22,4 +22,9 @@ public interface OrderMapper {
     int deleteUserById(@Param("id") String id);
 
     int addOrder(OrderEntity orderEntity);
+
+
+    OrderEntityVo queryOrderById(String id);
+
+   int updateOrder(OrderEntity orderEntity);
 }
