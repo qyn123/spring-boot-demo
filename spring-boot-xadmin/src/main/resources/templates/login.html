@@ -24,22 +24,25 @@
     <div id="darkbannerwrap"></div>
 
     <form method="post" class="layui-form" th:action="@{/login}">
-        <input name="userName" placeholder="用户名" type="text" lay-verify="required" class="layui-input">
+        <input name="userName" th:placeholder="#{login.userName}" type="text" lay-verify="required" class="layui-input">
         <hr class="hr15">
-        <input name="passWord" lay-verify="required" placeholder="密码" type="password" class="layui-input">
+        <input name="passWord" lay-verify="required" th:placeholder="#{login.passWord}" type="password" class="layui-input">
         <hr class="hr15">
         <div>
-            <input name="verifyCode" lay-verify="required" placeholder="验证码" type="text" class="layui-input">
+            <input name="verifyCode" lay-verify="required" th:placeholder="#{login.verifyCode}" type="text" class="layui-input">
             <hr class="hr15">
             <a href="javascript:void(0);" title="点击更换验证码">
                 <img th:src="@{/getVerifyCode}" onclick="changeCode()" class="verifyCode"/>
             </a>
         </div>
-        <input value="登录" style="width:100%;" type="submit">
-        <a href="register" style="font-size:smaller">没有账号？点击注册</a>
+        <input th:value="#{login.sign}" style="width:100%;" type="submit">
+        <a href="register"  style="font-size:smaller" th:value="#{login.register}">没有账号？点击注册</a>
         <p id="ts" style="color: red;font-size: small;text-align: center"
            th:text="${msg}"></p>
         <hr class="hr20">
+        <!--注意这个路径是我们controller访问页面的路径，不同的是这次携带了参数，可以帮我们用来区分locale-->
+        <a class="btn btn-sm" th:href="@{/login(l='zh_CN')}" rel="external nofollow" >中文</a>
+        <a class="btn btn-sm" th:href="@{/login(l='en_US')}" rel="external nofollow" >English</a>
     </form>
 </div>
 

@@ -1,6 +1,10 @@
 server:
   port: 8090
 spring:
+  messages:
+    #国际化文件名
+    basename: i18n/login
+    encoding: UTF-8
   redis:
     host: localhost
     password:
