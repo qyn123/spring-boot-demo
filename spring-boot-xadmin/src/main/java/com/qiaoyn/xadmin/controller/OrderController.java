@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -186,6 +187,21 @@ public class OrderController {
         System.out.println("数据回显" + orderEntityVo);
         model.addAttribute("order", orderEntityVo);
         return "/order/order-show";
+    }
+
+
+    @PostMapping("/deleteAll")
+    public String deleteAll(String[] chkIds) {
+        log.info("chkIds====>{}", (Object) chkIds);
+        if (Objects.isNull(chkIds)) {
+            return "redirect:/order-list";
+        } else {
+            if (orderService.deleteBatch(Arrays.asList(chkIds))) {
+                return "redirect:/order-list";
+            } else {
+                return "redirect:/order-list";
+            }
+        }
     }
 
 

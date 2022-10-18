@@ -12,6 +12,13 @@
 	<delete id="deleteUserById">
 		delete from `order` where order_id = #{id}
 	</delete>
+    <delete id="deleteBatchOrder">
+		delete from `order` where order_id in (
+		<foreach collection="idList" item="id" separator=",">
+			#{id}
+		</foreach>
+		)
+	</delete>
 
     <select id="queryOrderList" parameterType="com.qiaoyn.xadmin.entity.dto.OrderQuery" resultType="com.qiaoyn.xadmin.entity.OrderEntityVo">
         SELECT

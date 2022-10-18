@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -66,5 +67,10 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public boolean updateOrder(OrderEntity orderEntity) {
         return orderMapper.updateOrder(orderEntity) > 0;
+    }
+
+    @Override
+    public boolean deleteBatch(List<String> idList) {
+        return orderMapper.deleteBatchOrder(idList) > 0;
     }
 }

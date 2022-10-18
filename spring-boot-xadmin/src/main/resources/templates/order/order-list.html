@@ -75,13 +75,12 @@
         <a th:href="@{/order-add}" class="layui-btn"><i class="layui-icon"></i>添加</a>
     </xblock>
 
-    <form method="post" th:action="@{/order-list}">
+    <form id="listForm" th:action="@{/deleteAll}" method="post">
         <table class="layui-table">
             <thead>
             <tr>
                 <th>
-                    <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i>
-                    </div>
+                    <input class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2' type="checkbox">
                 </th>
                 <th>订单编号</th>
                 <th>收货人</th>
@@ -99,8 +98,7 @@
             <tbody>
             <tr th:each="order:${page.list}">
                 <td>
-                    <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2'><i
-                            class="layui-icon">&#xe605;</i></div>
+                    <input name="chkIds" class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='2' type="checkbox" th:value="${order.orderId}">
                 </td>
                 <td th:text="${order.orderId}">1000</td>
                 <td th:text="${order.userName}">老王:18925139194</td>
@@ -212,13 +210,14 @@
 
     function delAll(argument) {
 
-        var data = tableCheck.getData();
-
-        layer.confirm('确认要删除吗？' + data, function (index) {
-            //捉到所有被选中的，发异步进行删除
-            layer.msg('删除成功', {icon: 1});
-            $(".layui-form-checked").not('.header').parents('tr').remove();
-        });
+        // var data = tableCheck.getData();
+        //
+        // layer.confirm('确认要删除吗？' + data, function (index) {
+        //     //捉到所有被选中的，发异步进行删除
+        //     layer.msg('删除成功', {icon: 1});
+        //     $(".layui-form-checked").not('.header').parents('tr').remove();
+        // });
+        document.getElementById("listForm").submit();
     }
 </script>
 <script>var _hmt = _hmt || [];

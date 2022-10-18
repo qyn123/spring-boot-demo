@@ -21,6 +21,9 @@ public interface OrderMapper {
 
     int deleteUserById(@Param("id") String id);
 
+
+    int deleteBatchOrder(@Param("idList") List<String> idList);
+
     int addOrder(OrderEntity orderEntity);
 
 

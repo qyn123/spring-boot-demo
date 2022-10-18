@@ -5,6 +5,8 @@ import com.qiaoyn.xadmin.entity.OrderEntity;
 import com.qiaoyn.xadmin.entity.OrderEntityVo;
 import com.qiaoyn.xadmin.entity.dto.OrderQuery;
 
+import java.util.List;
+
 /**
  * @author qiaoyanan
  * date:2022/10/10 16:34
@@ -19,6 +21,7 @@ public interface OrderService {
 
     boolean updateOrder(OrderEntity orderEntity);
 
+    boolean deleteBatch(List<String> idList);
 
     OrderEntityVo  queryOrderById(String id);
 }
