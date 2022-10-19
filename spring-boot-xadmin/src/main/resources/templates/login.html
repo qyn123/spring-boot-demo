@@ -23,7 +23,7 @@
     <div class="message">x-admin2.0-管理登录</div>
     <div id="darkbannerwrap"></div>
 
-    <form method="post" class="layui-form" th:action="@{/login}">
+    <form method="post" class="layui-form" th:action="@{/toLogin}">
         <input name="userName" th:placeholder="#{login.userName}" type="text" lay-verify="required" class="layui-input">
         <hr class="hr15">
         <input name="passWord" lay-verify="required" th:placeholder="#{login.passWord}" type="password" class="layui-input">

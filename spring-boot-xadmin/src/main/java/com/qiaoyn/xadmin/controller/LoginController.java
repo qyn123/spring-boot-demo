@@ -31,7 +31,7 @@ public class LoginController {
         return "login";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/toLogin")
     public String selectUser(@RequestParam("userName") String username,
                              @RequestParam("passWord") String password,
                              @RequestParam("verifyCode") String verifyCode,
