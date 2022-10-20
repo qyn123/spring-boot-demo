@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script>
+        let person = {
+            name:'tom',
+            age:'24',
+            hobby:'吃饭,睡觉,打豆豆'
+        }
+        let s = JSON.stringify(person);
+        console.log(s)
+        let parsePerson = JSON.parse('{"name":"tom","age":"24","hobby":"吃饭,睡觉,打豆豆"}');
+        console.log(parsePerson)
+    </script>
+</body>
+</html>

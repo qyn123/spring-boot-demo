@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<script>
+    var person = {
+        name:'Tom',
+        birth: 1997,
+        age: getAge,
+        age1: function () {
+            return new Date().getFullYear() - this.birth
+        }
+    }
+    function getAge() {
+        return new Date().getFullYear() - 1997
+    }
+</script>
+</body>
+</html>
