@@ -22,7 +22,7 @@ public class OrderService {
      * @param productId 产品ID
      * @param num 数量
      */
-    public void createOrder(String userId, String productId, int num){
+    public void createFanoutOrder(String userId, String productId, int num){
         // 1.根据商品ID查询库存是否充足
 
         // 2.生成订单
@@ -37,4 +37,32 @@ public class OrderService {
         rabbitTemplate.convertAndSend("fanout_order_exchange","",orderId);
 
     }
+
+
+
+    /**
+     * 模拟用户创建订单
+     * @param userId  客户ID
+     * @param productId 产品ID
+     * @param num 数量
+     */
+    public void createDirectOrder(String userId, String productId, int num){
+        // 1.根据商品ID查询库存是否充足
+
+        // 2.生成订单
+        String orderId = UUID.randomUUID().toString();
+        System.out.println("订单生成成功....");
+
+        // 3.将订单id封装成MQ消息，投递到交换机
+        /**@params1 ：交换机名称
+         * @params2 ：路由key/队列名称
+         * @params3 ：消息内容
+         * 注：指定RoutingKey=qq和email
+         * 交换机direct_order_exchange与绑定的队列的BindingKey匹配的队列才会接收到
+         */
+        rabbitTemplate.convertAndSend("direct_order_exchange","qq",orderId);
+        rabbitTemplate.convertAndSend("direct_order_exchange","email",orderId);
+
+    }
+
 }

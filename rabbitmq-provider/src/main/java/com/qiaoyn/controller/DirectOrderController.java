@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
  * date:2022/10/24 14:08
  */
 @RestController
-@RequestMapping("/fanout")
-public class FanoutOrderController {
+@RequestMapping("/direct")
+public class DirectOrderController {
 
     @Autowired
     private OrderService orderService;
@@ -20,6 +20,6 @@ public class FanoutOrderController {
 
     @GetMapping("/order")
     public void getOrder() {
-        orderService.createFanoutOrder("1001","10",12);
+        orderService.createDirectOrder("1001","10",12);
     }
 }

@@ -1,4 +1,4 @@
-package com.qiaoyn.receiver.Fanout;
+package com.qiaoyn.receiver.fanout;
 
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
