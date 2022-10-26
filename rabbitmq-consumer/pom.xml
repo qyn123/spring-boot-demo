@@ -29,6 +29,10 @@
             <artifactId>amqp-client</artifactId>
             <version>5.12.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
