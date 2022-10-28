@@ -23,4 +23,12 @@ public class DeadTtlOrderController {
         orderService.createDeadTtlOrderQueue("1001","10",12);
     }
 
+
+    @GetMapping("/max/length/order")
+    public void getMaxLengthDeadTtlOrder() {
+        for (int i = 0; i < 10; i++) {
+            orderService.createMaxLengthDeadTtlOrderQueue("1001","10",12);
+        }
+    }
+
 }

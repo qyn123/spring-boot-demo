@@ -1,4 +1,4 @@
-package com.qiaoyn.receiver.dead;
+package com.qiaoyn.receiver.dead.max.length;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -19,11 +19,11 @@ import java.util.Date;
 @Slf4j
 @Component
 @RabbitListener(bindings = @QueueBinding(
-        value = @Queue(value = "dead_direct_Queue1",durable = "true",exclusive = "false",autoDelete = "false")
-        ,exchange = @Exchange(value = "dead_direct_exchange",type = ExchangeTypes.DIRECT,durable = "true",autoDelete = "false")
-        ,key = "dead"
+        value = @Queue(value = "max_length_dead_direct_Queue1",durable = "true",exclusive = "false",autoDelete = "false")
+        ,exchange = @Exchange(value = "max_length_dead_direct_exchange",type = ExchangeTypes.DIRECT,durable = "true",autoDelete = "false")
+        ,key = "max.length.dead"
 ))
-public class DeadDirectConsumer {
+public class MaxLengthDeadDirectConsumer {
 
     // 接收消息
     @RabbitHandler
