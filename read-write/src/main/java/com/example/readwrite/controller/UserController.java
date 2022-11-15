@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.example.readwrite.entity.User;
 import com.example.readwrite.entity.dto.UserDto;
 import com.example.readwrite.service.UserService;
-import freemarker.template.utility.StringUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
