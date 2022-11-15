@@ -23,7 +23,8 @@ spring:
         type: com.alibaba.druid.pool.DruidDataSource
         driver-class-name:  com.mysql.jdbc.Driver
     masterslave:
-      load-balance-algorithm-type: round_robin
+      #默认：轮询（ROUND_ROBIN），也可以配置随机（random）
+      load-balance-algorithm-type: ROUND_ROBIN
       name: ms
       # 指定主数据源
       master-data-source-name: master

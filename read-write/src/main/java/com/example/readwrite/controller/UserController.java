@@ -7,7 +7,6 @@ import com.example.readwrite.service.UserService;
 import freemarker.template.utility.StringUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.ParseException;
@@ -15,7 +14,6 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 /**
  * @author qiaoyanan
  * date:2022/11/14 15:54
@@ -29,15 +27,14 @@ public class UserController {
 
     @GetMapping("/selectAll")
     public List<User> selectAll() {
-        List<User> userList = userService.selectAllUsers();
-        System.out.println(userList);
-        return userList;
+        return userService.selectAllUsers();
     }
 
     @PostMapping
     public int addUser(@RequestBody UserDto userDto) {
         User user = new User();
         BeanUtils.copyProperties(userDto,user);
+        user.setId(UUID.randomUUID().toString().replace("-", ""));
         user.setBirth(formatDate(userDto.getBirth()));
         return userService.addUser(user);
     }
