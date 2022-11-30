@@ -7,7 +7,7 @@ COPY *.jar /app.jar
 CMD ["--server.port=8080"]
 
 #暴露端口
-EXPOSE 8080
+EXPOSE 8089
 
 #容器运行的命令
 ENTRYPOINT ["java","-jar","/app.jar"]
