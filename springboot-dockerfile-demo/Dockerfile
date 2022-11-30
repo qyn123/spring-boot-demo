@@ -4,7 +4,7 @@ FROM java:8
 COPY *.jar /app.jar
 
 #默认就是8080
-CMD ["--server.port=8080"]
+CMD ["--server.port=8089"]
 
 #暴露端口
 EXPOSE 8089
