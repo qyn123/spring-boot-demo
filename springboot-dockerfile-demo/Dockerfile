@@ -1,4 +1,5 @@
-FROM java:8
+FROM openjdk:8
+
 
 #将打成的jar包拷贝成名为 app.jar的jar包
 COPY *.jar /app.jar
