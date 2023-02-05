@@ -23,4 +23,10 @@ public class DispatchService {
             throw new Exception("物流信息创建失败，原因【数据库插入失败】");
         }
     }
+
+
+    public void dispatchs(String orderId)  {
+        String addSql = "insert into kd_Order(orderId, name,status)  values (?,?,?)";
+        int count = jdbcTemplate.update(addSql, orderId, "骑手张飞","0");
+    }
 }

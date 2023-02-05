@@ -8,3 +8,18 @@ spring:
     username: root
     password: root
     driver-class-name: com.mysql.jdbc.Driver
+  rabbitmq:
+    host: 127.0.0.1
+    username: guest
+    password: guest
+    port: 5672
+    listener:
+      simple:
+        # none 自动ack,默认达到最大重试次数会移除
+        #acknowledge-mode: none
+        # 这里开启手动ack,让程序去控制mq的消息的重发，删除和转移
+        acknowledge-mode: manual
+#        retry:
+#          enabled: true #开启重试
+#          max-attempts: 3 #最大重试次数
+#          initial-interval: 2000ms  #重试间隔时间

@@ -38,7 +38,9 @@ public class OrderController {
         orderService.createMQOrder(order);
     }
 
-
+    /**
+     * 可靠生产和推送确认
+     */
     @RequestMapping("/createMq/orders")
     public void createMqOrders() throws Exception {
         Order order = new Order();
