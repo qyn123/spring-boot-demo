@@ -27,7 +27,7 @@ public class MqDispatcherController {
     public void  messageConsumer(String orderMsg, @Header(AmqpHeaders.DELIVERY_TAG) long tag, Channel channel) throws Exception {
         try {
             // 获取消息队列的消息
-            System.out.println("收到mq的消息是："+ orderMsg + ",count=" + count++);
+            System.out.println("运单队列收到mq的消息是："+ orderMsg + ",count=" + count++);
             JSONObject jsonObject = JSONObject.fromObject(orderMsg);
             Order order = (Order) JSONObject.toBean(jsonObject, Order.class);
             // 手动ack告诉mq消息已经正常消费
@@ -39,7 +39,7 @@ public class MqDispatcherController {
              * 3. try catch + 手动ack + 死信队列
              */
             System.out.println(1 / 0);;
-            dispatchService.dispatchs(String.valueOf(order.getOrderId()));
+            dispatchService.dispatch(String.valueOf(order.getOrderId()));
 
             channel.basicAck(tag,false);
         } catch (Exception e) {
