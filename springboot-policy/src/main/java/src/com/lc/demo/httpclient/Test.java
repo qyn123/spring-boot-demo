@@ -16,8 +16,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-
-
+/**
+ * 拉取乐橙生产产品数据
+ */
 public class Test {
 
 	private final static String APPID = "000335";
