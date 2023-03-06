@@ -21,7 +21,8 @@ import java.util.Map.Entry;
 public class Test {
 
 	private final static String APPID = "000335";
-	private static String SURL = "http://api.dev.lechengyunfu.com/api/open_biz/index";
+	//private static String SURL = "http://api.dev.lechengyunfu.com/api/open_biz/index";
+	private static String SURL = "https://api.51tsbx.com/api/open_biz/index";
 	private static String SDK_VER = "1.0.0";
 
 	public static void main(String[] args) {
