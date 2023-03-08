@@ -31,6 +31,8 @@ public class DataUtil {
 		bzContent.put("benefited_user_mobile", "");
 		bzContent.put("policy_start_time", "2015-11-03 00:00:00");
 		bzContent.put("policy_end_time", "2015-11-03 23:59:59");
+		bzContent.put("page", "2");
+		bzContent.put("perPage","1000");
 
 		return bzContent;
 	}

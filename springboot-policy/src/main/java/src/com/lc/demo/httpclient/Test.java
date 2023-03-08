@@ -10,10 +10,7 @@ import org.apache.http.util.EntityUtils;
 import src.com.lc.demo.utils.*;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 /**
@@ -85,7 +82,7 @@ public class Test {
 				if (RSASignature.doCheck(unSign, resp.getSign(), RSAEncrypt.LC_PUBLIC_KEY)) {
 					String decryptContent = RSAEncrypt.decryptByPrivateKey(resp.getbContent(),
 							RSAEncrypt.DEV_PRIVATE_KEY);
-					System.out.println("解密后的数据 ：" + decryptContent);
+					System.out.println("解密后的数据 ：" + unicodeToChina(decryptContent));
 				} else {
 					System.out.println("签名验证失败，数据错误");
 				}
@@ -96,4 +93,80 @@ public class Test {
 			e.printStackTrace();
 		}
 	}
+
+
+	/**
+	 * 汉字转换Unicode
+	 * @param str
+	 * @return
+	 */
+	public static String StringToUnicode(String str) {
+		char[] arChar = str.toCharArray();
+		int iValue = 0;
+		String uStr = "";
+		for (int i = 0; i < arChar.length; i++) {
+			iValue = (int) str.charAt(i);
+			if (iValue <= 256) {
+				// uStr+="& "+Integer.toHexString(iValue)+";";
+				uStr += "\\" + Integer.toHexString(iValue);
+			} else {
+				// uStr+="&#x"+Integer.toHexString(iValue)+";";
+				uStr += "\\u" + Integer.toHexString(iValue);
+			}
+		}
+		return uStr;
+	}
+
+	/**
+	 * Unicode转换中文
+	 * @param
+	 * @return
+	 */
+	public static String UnicodeToString(String str) {
+		StringBuffer sb = new StringBuffer();
+		StringTokenizer st = new StringTokenizer(str, "\\u");
+		while (st.hasMoreTokens()) {
+			sb.append((char) Integer.parseInt(st.nextToken(), 16));
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * 中文转Unicode
+	 * @param str
+	 * @return
+	 */
+	public static String chineToUnicode(String str) {
+		StringBuffer sb = new StringBuffer();
+		for (int i = 0; i < str.length(); i++) {
+			char c = str.charAt(i);
+			if (c >= 0 && c <= 255) {
+				sb.append(c);
+			} else {
+				sb.append("\\u" + Integer.toHexString(c));
+			}
+		}
+		return sb.toString();
+	}
+
+	/**
+	 * Unicode转中文
+	 * @param utfString
+	 * @return
+	 */
+	public static String unicodeToChina(String utfString) {
+		StringBuilder sb = new StringBuilder();
+		int i = -1;
+		int pos = 0;
+
+		while ((i = utfString.indexOf("\\u", pos)) != -1) {
+			sb.append(utfString.substring(pos, i));
+			if (i + 5 < utfString.length()) {
+				pos = i + 6;
+				sb.append((char) Integer.parseInt(utfString.substring(i + 2, i + 6), 16));
+			}
+		}
+		return sb.toString();
+	}
+
 }
