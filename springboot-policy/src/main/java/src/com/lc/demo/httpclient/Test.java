@@ -94,61 +94,6 @@ public class Test {
 		}
 	}
 
-
-	/**
-	 * 汉字转换Unicode
-	 * @param str
-	 * @return
-	 */
-	public static String StringToUnicode(String str) {
-		char[] arChar = str.toCharArray();
-		int iValue = 0;
-		String uStr = "";
-		for (int i = 0; i < arChar.length; i++) {
-			iValue = (int) str.charAt(i);
-			if (iValue <= 256) {
-				// uStr+="& "+Integer.toHexString(iValue)+";";
-				uStr += "\\" + Integer.toHexString(iValue);
-			} else {
-				// uStr+="&#x"+Integer.toHexString(iValue)+";";
-				uStr += "\\u" + Integer.toHexString(iValue);
-			}
-		}
-		return uStr;
-	}
-
-	/**
-	 * Unicode转换中文
-	 * @param
-	 * @return
-	 */
-	public static String UnicodeToString(String str) {
-		StringBuffer sb = new StringBuffer();
-		StringTokenizer st = new StringTokenizer(str, "\\u");
-		while (st.hasMoreTokens()) {
-			sb.append((char) Integer.parseInt(st.nextToken(), 16));
-		}
-		return sb.toString();
-	}
-
-	/**
-	 * 中文转Unicode
-	 * @param str
-	 * @return
-	 */
-	public static String chineToUnicode(String str) {
-		StringBuffer sb = new StringBuffer();
-		for (int i = 0; i < str.length(); i++) {
-			char c = str.charAt(i);
-			if (c >= 0 && c <= 255) {
-				sb.append(c);
-			} else {
-				sb.append("\\u" + Integer.toHexString(c));
-			}
-		}
-		return sb.toString();
-	}
-
 	/**
 	 * Unicode转中文
 	 * @param utfString
