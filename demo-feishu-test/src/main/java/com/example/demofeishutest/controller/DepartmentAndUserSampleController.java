@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @author qiaoyanan
@@ -116,85 +119,60 @@ public class DepartmentAndUserSampleController {
      */
     @GetMapping("/childrenDepartmentSample/{departmentId}")
     public Object childrenDepartmentSample(@PathVariable(value = "departmentId") String departmentId) {
-        List<Department[]> list = new ArrayList<>();
-
-        int pageSize = 10;
+        int pageSize = 2;
+        List<ChildrenDepartmentResp> list = new ArrayList<>();
         String pageToken = null;
-        boolean hasMore = true;
         ChildrenDepartmentResp childrenDepartmentResp = getChildrenDepartment(departmentId, pageToken, pageSize);
         if (!childrenDepartmentResp.success()) {
             System.out.println(String.format("code:%s,msg:%s,reqId:%s", childrenDepartmentResp.getCode(), childrenDepartmentResp.getMsg(), childrenDepartmentResp.getRequestId()));
             return "error";
         } else {
-            ChildrenDepartmentRespBody respData = childrenDepartmentResp.getData();
-            // 如果has_more为true，说明可以分页
-            if (Objects.equals(respData.getHasMore(), Boolean.TRUE)) {
-                pageToken = respData.getPageToken();
-                list.add(respData.getItems());
-                // 处理数据
-            } else {
-                hasMore = false;
-                // 处理数据
-                list.add(respData.getItems());
+            list.add(childrenDepartmentResp);
+            while (childrenDepartmentResp.getData().getHasMore()) {
+                pageToken = childrenDepartmentResp.getData().getPageToken();
+                childrenDepartmentResp = getChildrenDepartment(departmentId, pageToken, pageSize);
+                list.add(childrenDepartmentResp);
             }
         }
 
-        while (hasMore) {
-            // 构建client
-            Client client = Client.newBuilder(appId, appSecret).build();
+        List<ChildrenDepartmentResp> childrenDepartmentRespList = testNextList(list, pageSize);
+        list.addAll(childrenDepartmentRespList);
+        while (childrenDepartmentRespList.size() > 0){
+            childrenDepartmentRespList = testNextList(childrenDepartmentRespList, pageSize);
+            list.addAll(childrenDepartmentRespList);
+        }
+        return list.stream().filter(childrenDepartmentResp1 -> Objects.nonNull(childrenDepartmentResp1.getData().getItems()));
+    }
 
-            // 创建请求对象
-            ChildrenDepartmentReq req = ChildrenDepartmentReq.newBuilder()
-                    .departmentId(departmentId)
-                    .userIdType("open_id")
-                    .departmentIdType("open_department_id")
-                    .pageSize(pageSize)
-                    .pageToken(pageToken)
-                    .build();
+    /**
+     *  获取下一层节点的所有数据
+     */
+    private List<ChildrenDepartmentResp> testNextList (List<ChildrenDepartmentResp> list,Integer pageSize) {
+        List<ChildrenDepartmentResp> respList = new ArrayList<>();
+        for (ChildrenDepartmentResp departmentResp : list) {
+            Department[] items = departmentResp.getData().getItems();
+            if (Objects.nonNull(items)) {
+                for (Department item : items) {
+                    String openDepartmentId = item.getOpenDepartmentId();
+                    String pageToken1 = null;
+                    ChildrenDepartmentResp childrenDepartment = getChildrenDepartment(openDepartmentId, pageToken1, pageSize);
 
-            // 发起请求
-            ChildrenDepartmentResp resp = null;
-            try {
-                resp = client.contact().department().children(req, RequestOptions.newBuilder()
-                        .userAccessToken(userAccessToken)
-                        .build());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            // 处理服务端错误
-            assert resp != null;
-            if (!resp.success()) {
-                System.out.println(String.format("code:%s,msg:%s,reqId:%s", resp.getCode(), resp.getMsg(), resp.getRequestId()));
-                return "error";
-            } else {
-                ChildrenDepartmentRespBody respData = resp.getData();
-                // 如果has_more为true，说明可以分页
-                if (Objects.equals(respData.getHasMore(), Boolean.TRUE)) {
-                    pageToken = respData.getPageToken();
-                    list.add(respData.getItems());
-                    for (Department item : respData.getItems()) {
-                        departmentId = item.getOpenDepartmentId();
-                    }
-                    // 处理数据
-                } else {
-                    hasMore = false;
-                    // 处理数据
-                    list.add(respData.getItems());
-                    for (Department item : respData.getItems()) {
-                        departmentId = item.getOpenDepartmentId();
-                        if (Objects.nonNull(departmentId)) {
-
+                    if (!childrenDepartment.success()) {
+                        System.out.println(String.format("code:%s,msg:%s,reqId:%s", childrenDepartment.getCode(), childrenDepartment.getMsg(), childrenDepartment.getRequestId()));
+                        break;
+                    } else {
+                        respList.add(childrenDepartment);
+                        while (childrenDepartment.getData().getHasMore()) {
+                            pageToken1 = childrenDepartment.getData().getPageToken();
+                            childrenDepartment = getChildrenDepartment(openDepartmentId, pageToken1, pageSize);
+                            respList.add(childrenDepartment);
                         }
                     }
+
                 }
-
             }
-
         }
-        // 业务数据处理
-        //return Jsons.DEFAULT.toJson(resp.getData());
-        return list;
+        return respList.stream().filter(childrenDepartmentResp -> Objects.nonNull(childrenDepartmentResp.getData().getItems())).collect(Collectors.toList());
     }
 
     private ChildrenDepartmentResp getChildrenDepartment(String departmentId, String pageToken, int pageSize) {
@@ -311,7 +289,8 @@ public class DepartmentAndUserSampleController {
     @GetMapping("/findByDepartmentUserSampleList/{departmentId}")
     public Object findByDepartmentUserSampleList(@PathVariable(value = "departmentId") String departmentId) {
         List<User[]> list = new ArrayList<>();
-        Integer pageSize = 10; String pageToken = null;
+        Integer pageSize = 10;
+        String pageToken = null;
         FindByDepartmentUserResp resp = findByDepartmentUserSampleList(departmentId, pageSize, pageToken);
         // 处理服务端错误
         if (!resp.success()) {
