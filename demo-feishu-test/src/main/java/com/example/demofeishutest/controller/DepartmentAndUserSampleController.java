@@ -9,6 +9,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 /**
  * @author qiaoyanan
  * date:2023/03/22 15:09
@@ -112,8 +116,88 @@ public class DepartmentAndUserSampleController {
      */
     @GetMapping("/childrenDepartmentSample/{departmentId}")
     public Object childrenDepartmentSample(@PathVariable(value = "departmentId") String departmentId) {
+        List<Department[]> list = new ArrayList<>();
 
-        // 构建client
+        int pageSize = 10;
+        String pageToken = null;
+        boolean hasMore = true;
+        ChildrenDepartmentResp childrenDepartmentResp = getChildrenDepartment(departmentId, pageToken, pageSize);
+        if (!childrenDepartmentResp.success()) {
+            System.out.println(String.format("code:%s,msg:%s,reqId:%s", childrenDepartmentResp.getCode(), childrenDepartmentResp.getMsg(), childrenDepartmentResp.getRequestId()));
+            return "error";
+        } else {
+            ChildrenDepartmentRespBody respData = childrenDepartmentResp.getData();
+            // 如果has_more为true，说明可以分页
+            if (Objects.equals(respData.getHasMore(), Boolean.TRUE)) {
+                pageToken = respData.getPageToken();
+                list.add(respData.getItems());
+                // 处理数据
+            } else {
+                hasMore = false;
+                // 处理数据
+                list.add(respData.getItems());
+            }
+        }
+
+        while (hasMore) {
+            // 构建client
+            Client client = Client.newBuilder(appId, appSecret).build();
+
+            // 创建请求对象
+            ChildrenDepartmentReq req = ChildrenDepartmentReq.newBuilder()
+                    .departmentId(departmentId)
+                    .userIdType("open_id")
+                    .departmentIdType("open_department_id")
+                    .pageSize(pageSize)
+                    .pageToken(pageToken)
+                    .build();
+
+            // 发起请求
+            ChildrenDepartmentResp resp = null;
+            try {
+                resp = client.contact().department().children(req, RequestOptions.newBuilder()
+                        .userAccessToken(userAccessToken)
+                        .build());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            // 处理服务端错误
+            assert resp != null;
+            if (!resp.success()) {
+                System.out.println(String.format("code:%s,msg:%s,reqId:%s", resp.getCode(), resp.getMsg(), resp.getRequestId()));
+                return "error";
+            } else {
+                ChildrenDepartmentRespBody respData = resp.getData();
+                // 如果has_more为true，说明可以分页
+                if (Objects.equals(respData.getHasMore(), Boolean.TRUE)) {
+                    pageToken = respData.getPageToken();
+                    list.add(respData.getItems());
+                    for (Department item : respData.getItems()) {
+                        departmentId = item.getOpenDepartmentId();
+                    }
+                    // 处理数据
+                } else {
+                    hasMore = false;
+                    // 处理数据
+                    list.add(respData.getItems());
+                    for (Department item : respData.getItems()) {
+                        departmentId = item.getOpenDepartmentId();
+                        if (Objects.nonNull(departmentId)) {
+
+                        }
+                    }
+                }
+
+            }
+
+        }
+        // 业务数据处理
+        //return Jsons.DEFAULT.toJson(resp.getData());
+        return list;
+    }
+
+    private ChildrenDepartmentResp getChildrenDepartment(String departmentId, String pageToken, int pageSize) {
         Client client = Client.newBuilder(appId, appSecret).build();
 
         // 创建请求对象
@@ -121,7 +205,8 @@ public class DepartmentAndUserSampleController {
                 .departmentId(departmentId)
                 .userIdType("open_id")
                 .departmentIdType("open_department_id")
-                .pageSize(10)
+                .pageSize(pageSize)
+                .pageToken(pageToken)
                 .build();
 
         // 发起请求
@@ -133,14 +218,7 @@ public class DepartmentAndUserSampleController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        // 处理服务端错误
-        if (!resp.success()) {
-            System.out.println(String.format("code:%s,msg:%s,reqId:%s", resp.getCode(), resp.getMsg(), resp.getRequestId()));
-            return "error";
-        }
-        // 业务数据处理
-        return Jsons.DEFAULT.toJson(resp.getData());
+        return resp;
     }
 
     /**
@@ -183,9 +261,28 @@ public class DepartmentAndUserSampleController {
         return Jsons.DEFAULT.toJson(resp.getData());
     }
 
+    /**
+     * 获取单个部门用户信息
+     */
     @GetMapping("/getDepartmentSample/{departmentId}")
     public Object getDepartmentSample(@PathVariable(value = "departmentId") String departmentId) {
 
+        GetDepartmentResp resp = getDepartmentResp(departmentId);
+
+        // 处理服务端错误
+        if (!resp.success()) {
+            System.out.println(String.format("code:%s,msg:%s,reqId:%s", resp.getCode(), resp.getMsg(), resp.getRequestId()));
+            return "error";
+        } else {
+
+        }
+
+        // 业务数据处理
+        return Jsons.DEFAULT.toJson(resp.getData());
+    }
+
+
+    private GetDepartmentResp getDepartmentResp(String departmentId) {
         // 构建client
         Client client = Client.newBuilder(appId, appSecret).build();
 
@@ -205,33 +302,49 @@ public class DepartmentAndUserSampleController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        // 处理服务端错误
-        if (!resp.success()) {
-            System.out.println(String.format("code:%s,msg:%s,reqId:%s", resp.getCode(), resp.getMsg(), resp.getRequestId()));
-            return "error";
-        }
-
-        // 业务数据处理
-        return Jsons.DEFAULT.toJson(resp.getData());
+        return resp;
     }
-
 
     /**
      * 获取部门直属用户列表
      */
     @GetMapping("/findByDepartmentUserSampleList/{departmentId}")
     public Object findByDepartmentUserSampleList(@PathVariable(value = "departmentId") String departmentId) {
+        List<User[]> list = new ArrayList<>();
+        Integer pageSize = 10; String pageToken = null;
+        FindByDepartmentUserResp resp = findByDepartmentUserSampleList(departmentId, pageSize, pageToken);
+        // 处理服务端错误
+        if (!resp.success()) {
+            System.out.println(String.format("code:%s,msg:%s,reqId:%s", resp.getCode(), resp.getMsg(), resp.getRequestId()));
+            return "error";
+        } else {
+            list.add(resp.getData().getItems());
+            while (resp.getData().getHasMore()) {
+                pageToken = resp.getData().getPageToken();
+                resp = findByDepartmentUserSampleList(departmentId, pageSize, pageToken);
+                if (!resp.success()) {
+                    System.out.println(String.format("code:%s,msg:%s,reqId:%s", resp.getCode(), resp.getMsg(), resp.getRequestId()));
+                    return "error";
+                }
+                list.add(resp.getData().getItems());
+            }
+        }
+        // 业务数据处理
+        return list;
+    }
+
+
+    public FindByDepartmentUserResp findByDepartmentUserSampleList(String departmentId, Integer pageSize, String pageToken) {
         // 构建client
         Client client = Client.newBuilder(appId, appSecret).build();
-
         // 创建请求对象
         FindByDepartmentUserReq req = FindByDepartmentUserReq.newBuilder()
                 .userIdType("open_id")
                 .departmentIdType("open_department_id")
-                //0
                 .departmentId(departmentId)
-                .pageSize(50)
+                .pageSize(pageSize)
+                // 当has_more为true时候，代表分页，可以用page_size和page_token进行分页查询
+                .pageToken(pageToken)
                 .build();
 
         // 发起请求
@@ -243,17 +356,7 @@ public class DepartmentAndUserSampleController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        // 处理服务端错误
-        assert resp != null;
-        if (!resp.success()) {
-            System.out.println(String.format("code:%s,msg:%s,reqId:%s", resp.getCode(), resp.getMsg(), resp.getRequestId()));
-            return "error";
-        }
-
-        // 业务数据处理
-        return Jsons.DEFAULT.toJson(resp.getData());
+        return resp;
     }
-
 
 }
