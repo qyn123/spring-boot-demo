@@ -30,9 +30,6 @@ public class DepartmentAndUserSampleController {
     @Value("${feishu.app.secret}")
     private String appSecret;
 
-    @Value("${feishu.app.user.access.token}")
-    private String userAccessToken;
-
     @Value("${feishu.app.tenant.access.token}")
     private String tenantAccessToken;
 
@@ -96,7 +93,7 @@ public class DepartmentAndUserSampleController {
         ListDepartmentResp resp = null;
         try {
             resp = client.contact().department().list(req, RequestOptions.newBuilder()
-                    .userAccessToken(userAccessToken)
+                    .tenantAccessToken(tenantAccessToken)
                     .build());
         } catch (Exception e) {
             e.printStackTrace();
@@ -141,7 +138,7 @@ public class DepartmentAndUserSampleController {
             childrenDepartmentRespList = testNextList(childrenDepartmentRespList, pageSize);
             list.addAll(childrenDepartmentRespList);
         }
-        return list.stream().filter(childrenDepartmentResp1 -> Objects.nonNull(childrenDepartmentResp1.getData().getItems()));
+        return list.stream().filter(childrenDepartment -> Objects.nonNull(childrenDepartment.getData().getItems()));
     }
 
     /**
@@ -191,7 +188,7 @@ public class DepartmentAndUserSampleController {
         ChildrenDepartmentResp resp = null;
         try {
             resp = client.contact().department().children(req, RequestOptions.newBuilder()
-                    .userAccessToken(userAccessToken)
+                    .tenantAccessToken(tenantAccessToken)
                     .build());
         } catch (Exception e) {
             e.printStackTrace();
@@ -223,7 +220,7 @@ public class DepartmentAndUserSampleController {
         ParentDepartmentResp resp = null;
         try {
             resp = client.contact().department().parent(req, RequestOptions.newBuilder()
-                    .userAccessToken(userAccessToken)
+                    .tenantAccessToken(tenantAccessToken)
                     .build());
         } catch (Exception e) {
             e.printStackTrace();
@@ -275,7 +272,7 @@ public class DepartmentAndUserSampleController {
         GetDepartmentResp resp = null;
         try {
             resp = client.contact().department().get(req, RequestOptions.newBuilder()
-                    .userAccessToken(userAccessToken)
+                    .tenantAccessToken(tenantAccessToken)
                     .build());
         } catch (Exception e) {
             e.printStackTrace();
@@ -330,7 +327,7 @@ public class DepartmentAndUserSampleController {
         FindByDepartmentUserResp resp = null;
         try {
             resp = client.contact().user().findByDepartment(req, RequestOptions.newBuilder()
-                    .userAccessToken(userAccessToken)
+                    .tenantAccessToken(tenantAccessToken)
                     .build());
         } catch (Exception e) {
             e.printStackTrace();
