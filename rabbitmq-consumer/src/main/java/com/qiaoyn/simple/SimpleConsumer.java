@@ -1,11 +1,8 @@
 package com.qiaoyn.simple;
 
-import com.rabbitmq.client.CancelCallback;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-
-import java.io.IOException;
 
 /**
  * @author qiaoyanan
@@ -16,10 +13,10 @@ public class SimpleConsumer {
     public static void main(String[] args) {
         // 1.建立连接工厂
         ConnectionFactory factory = new ConnectionFactory();
-        factory.setHost("127.0.0.1");
+        factory.setHost("43.143.142.233");
         factory.setPort(5672);
-        factory.setUsername("guest");
-        factory.setPassword("guest");
+        factory.setUsername("admin");
+        factory.setPassword("admin");
         Connection connection = null;
         Channel channel = null;
         try {
@@ -35,11 +32,7 @@ public class SimpleConsumer {
              *   @param3：消息送达时的回调
              *   @param4：消费者被取消时的回调
              */
-            channel.basicConsume("queue001", true, (consumerTag, message) -> System.out.println("接收成功！消息内容：" + new String(message.getBody(), "UTF-8")), new CancelCallback() {
-                public void handle(String consumerTag) throws IOException {
-                    System.out.println("接收消息失败。。。。。");
-                }
-            });
+            channel.basicConsume("queue001", true, (consumerTag, message) -> System.out.println("接收成功！消息内容：" + new String(message.getBody(), "UTF-8")), consumerTag -> System.out.println("接收消息失败。。。。。"));
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

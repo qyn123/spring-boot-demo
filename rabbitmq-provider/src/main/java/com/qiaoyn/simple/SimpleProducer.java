@@ -16,10 +16,10 @@ public class SimpleProducer {
         // 1.建立连接工厂
         ConnectionFactory factory = new ConnectionFactory();
         // 基于TCP/IP协议自然而然需要端口、ip等，比如mysql，redis等中间件
-        factory.setHost("127.0.0.1");
+        factory.setHost("43.143.142.233");
         factory.setPort(5672);
-        factory.setUsername("guest");
-        factory.setPassword("guest");
+        factory.setUsername("admin");
+        factory.setPassword("admin");
 
         Connection connection = null;
         Channel channel = null;
